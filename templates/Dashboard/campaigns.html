@@ -1,0 +1,106 @@
+{% extends 'layouts/dashboard_layout.html' %}
+
+{% block title %}
+    Campaigns
+{% endblock %}
+
+{% block tab_content %}
+
+    <div class="container mt-5 table-responsive">
+        <h2 class="mb-4">Campaigns Table</h2>
+        <table class="table table-bordered ">
+            <thead class="text-center">
+            <tr>
+                <th>ID</th>
+                <th>Tile</th>
+                <th>Budget </th>
+                <th>Description</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Status</th>
+            </tr>
+            </thead>
+            <tbody class="table-group-divider text-center">
+            {% for cmp in cmps %}
+                {#                sponsors#}
+{#                {{ sponsor }}#}
+                                <tr>
+                                    <td>{{ cmp.id }}</td>
+                                    <td>{{ cmp.title }}</td>
+                                    <td>{{ cmp.budget }}</td>
+                                    <td>{{ cmp.description }}</td>
+                                    <td>{{ cmp.start_date }}</td>
+                                    <td>{{ cmp.end_date }}</td>
+                                    <td><span class="badge text-bg-primary">completed</span></td>
+                                    <td><button class="btn btn-secondary">View</button></td>
+                                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="d-flex">
+        <div class="modal fade" id="exampleModalToggle" aria-hidden="true"
+             aria-labelledby="exampleModalToggleLabel" tabindex="-1"
+        style="backdrop-filter: blur(15px)">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content" style="box-shadow: 11px 7px 11px 4px #0000006b; background-color: #ffffff2b">
+                    <div class="modal-header" style="background: #75b798">
+                        <h1 class="modal-title fs-5" id="exampleModalToggleLabel">Add Campaign</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+
+                        <form class="form1" method="post" enctype="multipart/form-data" id="addForm">
+                            <div class="form-floating mb-3">
+                                <input name="title" type="text" class="form-control" id="campaignName"
+                                       aria-describedby="emailHelp" placeholder="name@example.com">
+                                <label for="campaignName" class="form-label"> Title </label>
+                            </div>
+
+                            <div class="form-floating mb-3">
+                                <input name="type" type="text" class="form-control"
+                                       id="inputType" placeholder="Password">
+                                <label for="inputType" class="form-label "> Type </label>
+                            </div>
+
+                            <div class="form-floating mb-3">
+                                <input name="budget" type="number" class="form-control"
+                                       id="inputBudget" placeholder="Password">
+                                <label for="inputBudget" class="form-label "> Budget (₹) </label>
+                            </div>
+
+                            <div class="form-floating mb-3">
+                                <textarea name="description" type="text" class="form-control"
+                                          id="inputAbout" placeholder="description"></textarea>
+                                <label for="inputAbout" class="form-label "> Description </label>
+                            </div>
+
+                            <div class="form-floating mb-3">
+                                <input name="start_date" type="date" class="form-control"
+                                       id="inputDate" placeholder="Password">
+                                <label for="inputDate" class="form-label "> Start Date </label>
+                            </div>
+
+                            <div class="form-floating mb-3">
+                                <input name="end_date" type="date" class="form-control"
+                                       id="inputEndDate" placeholder="Password">
+                                <label for="inputEndDate" class="form-label "> End Date </label>
+                            </div>
+
+
+                        </form>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" form="addForm" class="btn btn-primary" data-bs-dismiss="modal">Add
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button class="btn btn-primary" data-bs-target="#exampleModalToggle" data-bs-toggle="modal">Add Campaigns
+        </button>
+    </div>
+{% endblock %}

@@ -1,0 +1,164 @@
+{% extends 'layouts/default.html' %}
+
+{% block title %}
+    Create Profile
+{% endblock %}
+
+{% block head %}
+    {{ super() }}
+
+    <style>
+        .sidebar {
+            background: #a5a5a533;
+            width: 200px;
+            padding: 4px;
+            margin: 2vh;
+            height: 90vh;
+            border-radius: 1rem;
+            display: flex;
+        }
+
+        .sidebar a {
+            text-decoration: none;
+            border-radius: 3px;
+            border-color: antiquewhite;
+            background: var(--accent);
+            padding: 6px;
+            text-align: center;
+        }
+
+        #content {
+            position: relative;
+            background: #dbdbdb;
+            width: -webkit-fill-available;
+            margin: 2vh;
+            border-radius: 1vh;
+        }
+    </style>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const tabs = document.querySelectorAll(".tab")
+
+            const currentPath = window.location.pathname.split("/").pop()
+        })
+    </script>
+{% endblock %}
+
+{% block content %}
+    <div style="    display: flex;flex-direction: row;">
+
+        <div class="sidebar" style="visibility: hidden">
+            <nav class="navbar" style="justify-content: center">
+                <div class="profile" style="align-self: flex-start;width: fit-content; ">
+                    <img src="{{ url_for('static',filename='logo.svg') }}" alt="profile pic" width="31px" height="25px">
+                    <a href="{{ url_for ("profile", username=g.username) }}"
+                       style="background: none"> {{ g.username }}</a>
+                </div>
+                <div class="container-fluid" style="align-self: flex-start">
+                    <div class="row m-2 gap-4">
+                        <a href=""> Overview </a>
+                        <a> Campaigns</a>
+                        <a> Find</a>
+                        <a> Stats</a>
+                    </div>
+                </div>
+            </nav>
+        </div>
+        <div class="grid" id="content" style="align-content: center">
+            {% if session['role'] == 'influencer' %}
+                I am influencer
+
+                <div class="card-body " style="display: flex; place-content: center">
+
+                    <form method="post" style="width: 3in;" enctype="multipart/form-data">
+                        <div class="mb-3">
+                            <label for="fullname" class="form-label">Full Name</label>
+                            <input type="text" name="fullname" class="form-control" id="fullname"
+                                   aria-describedby="emailHelp">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Your Email / Company Email</label>
+                            <input name="email" type="email" class="form-control" id="email"
+                                   aria-describedby="emailHelp">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="num" class="form-label"> Phone Number </label>
+                            <input name="phone_number" type="number" class="form-control" id="num"
+                                   aria-describedby="emailHelp">
+                        </div>
+
+
+                        <div class="mb-3">
+                            <label for="Cname" class="form-label">Company Name</label>
+                            <input name="company_name" type="text" class="form-control" id="Cname">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="website" class="form-label">Company Website</label>
+                            <input name="website" type="text" class="form-control" id="website">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="industry" class="form-label">Industry</label>
+                            <input name="industry" type="text" class="form-control" id="industry">
+                        </div>
+
+
+                        <button type="submit" class="btn btn-primary" style="justify-self: center">Submit</button>
+                    </form>
+                </div>
+
+            {% endif %}
+
+            {% if session['role'] == 'sponsor' %}
+
+                <div class="card-body " style="display: flex; place-content: center">
+
+                    <form method="post" style="width: 3in;" enctype="multipart/form-data">
+                        <div class="mb-3">
+                            <label for="fullname" class="form-label">Full Name</label>
+                            <input type="text" name="fullname" class="form-control" id="fullname"
+                                   aria-describedby="emailHelp">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Your Email / Company Email</label>
+                            <input name="email" type="email" class="form-control" id="email"
+                                   aria-describedby="emailHelp">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="num" class="form-label"> Phone Number </label>
+                            <input name="phone_number" type="number" class="form-control" id="num"
+                                   aria-describedby="emailHelp">
+                        </div>
+
+
+                        <div class="mb-3">
+                            <label for="Cname" class="form-label">Company Name</label>
+                            <input name="company_name" type="text" class="form-control" id="Cname">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="website" class="form-label">Company Website</label>
+                            <input name="website" type="text" class="form-control" id="website">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="industry" class="form-label">Industry</label>
+                            <input name="industry" type="text" class="form-control" id="industry">
+                        </div>
+
+
+                        <button type="submit" class="btn btn-primary" style="justify-self: center">Submit</button>
+                    </form>
+                </div>
+
+            {% endif %}
+
+        </div>
+    </div>
+{% endblock %}

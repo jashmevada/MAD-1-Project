@@ -1,0 +1,16 @@
+/*body {*/
+/*    background: aqua;*/
+/*}*/
+
+:root{
+    --background: #F5F9F8;
+    --text-color: #111413;
+    --primary: #59B49A;
+    --secondary: #90DDC7;
+    --accent: #55DFB7;
+}
+
+.form-control:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 .25rem rgb(89 180 154 / 23%);
+}

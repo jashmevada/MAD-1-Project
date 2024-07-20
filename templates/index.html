@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Influx Connect</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename="bootstrap/css/bootstrap.min.css") }}">
+
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename="style.css") }}">
+
+    <script type="text/javascript" src="{{ url_for('static', filename="bootstrap/js/bootstrap.min.js") }}"></script>
+
+    <style>
+        #ns {
+                background: var(--accent);
+    /* width: 4em; */
+    text-align: center;
+    /* border-color: var(--primary); */
+    border-radius: 20px;
+    font-size: 1.3em;
+        }
+
+    </style>
+    <script type="text/javascript">
+    </script>
+</head>
+<body>
+{#<nav class="navbar bg-body-tertiary">#}
+{#  <div class="container-fluid">#}
+{#    <a class="navbar-brand">Influx Connect</a>#}
+{##}
+{#    <div class="d-flex">#}
+{#      <a id="ns" href="/about">Login</a>#}
+{#    </div>#}
+{#  </div>#}
+{#</nav>#}
+
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">Navbar</a>
+
+    <div class="collapse navbar-collapse " id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0 gap-4">
+        <li class="nav-item">
+          <a id="ns" class="nav-link active" aria-current="page" href="/">Home</a>
+        </li>
+        <li class="nav-item">
+          <a id="ns" class="nav-link" href="/about">About Us</a>
+        </li>
+            <li class="nav-item">
+          <a id="ns" class="nav-link" href="/about">Content Us</a>
+        </li>
+      </ul>
+
+    </div>
+            <div class="d-flex">
+         <a class="nav-link" id="ns" href="/signup">Login</a>
+      </div>
+  </div>
+</nav>
+
+<div class="d-grid gap-2 d-md-block">
+<button class="btn btn-primary" style="--bs-btn-active-bg: var(--accent)"> I AM A BRAND</button>
+
+<button class="btn btn-secondary"> I AM A CREATOR</button>
+
+</div>
+
+</body>
+</html>

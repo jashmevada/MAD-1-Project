@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block title %}SignUp{% endblock %}
+
+{% block head %}
+    {{ super() }}
+    <style>
+        body {
+        {#display: flex;#}{#flex-direction: column;#}{#gap: 5px;#} display: grid;
+            grid-template-rows: 100px 100px 100px;
+            font-family: var(--font-poppins), serif;
+        }
+
+        .card-body {
+            display: flex;
+            flex-direction: column;
+            flex-wrap: wrap;
+            align-content: space-around;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="card mb-3 p-3" style="grid-row: 4; justify-self: center">
+        <div class="card-header" style="font-family: var(--font-inknut-antiqua),sans-serif">Sign Up</div>
+        <div class="card-body">
+
+            <form method="post" style="width: 3in;" enctype="multipart/form-data">
+
+                <select name="role" class="form-select" aria-label="select Role">
+                    <option selected value="Influencer">Influencer</option>
+                    <option value="Sponsor">Sponsor</option>
+                </select>
+
+                <div class="mb-3">
+                    <label for="username" class="form-label">Username</label>
+                    <input name="username" class="form-control" id="username" aria-describedby="emailHelp">
+                </div>
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email address</label>
+                    <input name="email" type="email" class="form-control" id="email" aria-describedby="emailHelp">
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label">Password</label>
+                    <input name="password" type="password" class="form-control" id="password">
+                </div>
+                <button type="submit"class="btn btn-primary" style="justify-self: center">Submit</button>
+            </form>
+        </div>
+
+    </div>
+
+    <img src="{{ url_for('static', filename="inflancer.webp") }}" width="462px" height="361" style="grid-row: 2; justify-self: right; margin: 5px" alt="">
+
+{% endblock %}

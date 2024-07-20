@@ -1,0 +1,67 @@
+{% extends 'layouts/default.html' %}
+
+{% block title %}
+    Profile
+{% endblock %}
+
+{% block head %}
+    {{ super() }}
+
+    <style>
+        body {
+            display: grid;
+            grid-template-rows: auto;
+        }
+
+        .sidebar {
+            background: #a5a5a533;
+            width: 200px;
+            padding: 4px;
+            margin: 2vh;
+            height: 90vh;
+            border-radius: 1rem;
+            display: flex;
+        }
+
+        .sidebar a {
+            text-decoration: none;
+            border-radius: 3px;
+            border-color: antiquewhite;
+            background: var(--accent);
+            padding: 6px;
+            text-align: center;
+        }
+    </style>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const tabs = document.querySelectorAll(".tab")
+
+            const currentPath = window.location.pathname.split("/").pop()
+
+
+        })
+    </script>
+{% endblock %}
+
+{% block content %}
+
+    <div class="sidebar">
+        <nav class="navbar" style="justify-content: center">
+            <div class="profile" style="align-self: flex-start;width: fit-content; ">
+                <img src="{{ url_for('static',filename='logo.svg') }}" alt="profile pic" width="31px" height="25px">
+                <a href="{{ url_for ("profile", username=g.username) }}" style="background: none"> {{ session['username'] }}</a>
+            </div>
+            <div class="container-fluid" style="align-self: flex-start">
+                <div class="row m-2 gap-4">
+                    <a href=""> Overview </a>
+                    <a> Campaigns</a>
+                    <a> Find</a>
+                    <a> Stats</a>
+                </div>
+
+            </div>
+        </nav>
+    </div>
+
+{% endblock %}

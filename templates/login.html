@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block title %}Name{% endblock %}
+
+{% block head %}
+    {{ super() }}
+    <style>
+    body {
+        {#display: flex;#}
+        {#flex-direction: column;#}
+        {#gap: 5px;#}
+        display: grid;
+        grid-template-rows: 100px 100px 100px;
+        font-family: var(--font-poppins), serif;
+    }
+    </style>
+{% endblock %}
+
+{% block content %}
+
+    <div class="card text-center mb-3 p-3" style="width: 20rem; grid-row: 4; justify-self: end; right: 3in;">
+
+        <div class="card-body">
+            <form class="form1" method="post" enctype="multipart/form-data">
+                <div class="mb-3">
+                    <label for="InputEmail1" class="form-label">Email address OR username</label>
+                    <input name="Email" type="email" class="form-control" id="InputEmail1" aria-describedby="emailHelp">
+                </div>
+
+                <div class="mb-3">
+                    <label for="InputPassword1" class="form-label ">Password</label>
+                    <input name="password" type="password" class="form-control" id="InputPassword1">
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+                <a href="/auth/signup" class="btn btn-primary">New User</a>
+            </form>
+
+
+        </div>
+    </div>
+{% endblock %}
