@@ -1,7 +1,7 @@
-from flask import (Blueprint, render_template, session, request, redirect, url_for)
-from db.db import db
+from flask import (Blueprint, render_template, session, request)
 
-from models.model import Sponsor, Influence
+from models.model import *
+import controllers.common as common
 
 bp = Blueprint('sponsor', __name__, url_prefix='/sponsor')
 
@@ -11,7 +11,7 @@ def create_profile(username):
     print(session)
     if request.method == 'POST':
         print("GOT POST REQ")
-        print (request.form)
+        print(request.form)
 
         spn = Sponsor(
             user_id=username,
@@ -25,7 +25,8 @@ def create_profile(username):
 
         create_sponsor(spn)
 
-        return redirect(url_for("common.render_test", active='overview'))
+        return common.overview()
+        # return redirect(url_for("common.overview"))
 
     return render_template("create_profile.html")
 
@@ -46,7 +47,11 @@ def create_sponsor(sponsor: Sponsor):
 
 @bp.route('/find', methods=['GET', 'POST'])
 def find_influencer():
-    infs = Influence.query.all()
+    infs = Influencer.query.all()
     print(infs)
+    return render_template("sponsor/find_inf.html", active_tab="find", infs=infs, cmps=Campaign.query.filter(Campaign.sponsor_id == Sponsor.query.get(session['username']).user_id).all())
 
-    return render_template("Dashboard/find_inf.html", active_tab="find", infs=infs)
+
+@bp.route("/overview", methods=['GET'])
+def overview():
+    return render_template("sponsor/overview.html", active_tab="overview", role='sponsor', user=Sponsor.query.get(session['username']))

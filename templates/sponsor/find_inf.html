@@ -1,0 +1,201 @@
+{% extends 'layouts/dashboard_layout.html' %}
+
+{% block title %}
+    Find Influencer
+{% endblock %}
+
+{% block tab_content %}
+    <div class="mb-3 w-25">
+        <label for="Cname" class="form-label">Search</label>
+        <input name="search" type="text" class="form-control" id="Cname">
+    </div>
+
+    {#    <div class="container mt-5 table-responsive">#}
+    {#        <h2 class="mb-4">Influencers</h2>#}
+    {#        <table class="table table-bordered ">#}
+    {#            <thead class="text-center">#}
+    {#            <tr>#}
+    {#                <th>User ID</th>#}
+    {#                <th>Name</th>#}
+    {#                <th>Gender</th>#}
+    {#                <th>Niche</th>#}
+    {#                <th>Email</th>#}
+    {#            </tr>#}
+    {#            </thead>#}
+    {#            <tbody class="table-group-divider text-center">#}
+    {#            {% for cmp in infs %}#}
+    {#                                sponsors#}
+    {#                {{ sponsor }}#}
+    {#                                <tr>#}
+    {#                                    <td>{{ cmp.user_id }}</td>#}
+    {#                                    <td>{{ cmp.name }}</td>#}
+    {#                                    <td>{{ cmp.gender }}</td>#}
+    {#                                    <td>{{ cmp.niche }}</td>#}
+    {#                                <td>{{ cmp.email }}</td>#}
+    {#                                </tr>#}
+    {#            {% endfor %}#}
+    {#            </tbody>#}
+    {#        </table>#}
+    {#    </div>#}
+
+    <table class="table align-middle mb-0 bg-white mt-4 table-responsive container">
+        <thead class="bg-light">
+        <tr>
+            <th>Name</th>
+            <th>Niche</th>
+            <th>Channel Link</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for cmp in infs %}
+            <tr>
+                <td>
+                    <div class="d-flex align-items-center">
+                        <img
+                                {% if cmp.image != '' %}
+                                    src="{{ url_for('static', filename='/uploads/' + cmp.image) }}"
+                                {% else %}
+                                    src="https://mdbootstrap.com/img/new/avatars/8.jpg"
+                                {% endif %}
+                                    alt=""
+                                    style="width: 45px; height: 45px"
+                                    class="rounded-circle"
+                        />
+                        <div class="ms-3">
+                            <p class="fw-bold mb-1">{{ cmp.name }} </p>
+                            <p class="text-muted mb-0">{{ cmp.email }}</p>
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    {{ cmp.niche }}
+                    {#                    <p class="fw-normal mb-1">Software engineer</p>#}
+                    {#                    <p class="text-muted mb-0">IT department</p>#}
+                </td>
+                <td><a href="{{ cmp.channel }}">{{ cmp.channel }} </a></td>
+                <td>
+                    <button type="button" class="btn btn-primary btn-sm btn-rounded"
+                            data-bs-target="#exampleModalToggle" data-bs-toggle="modal">
+                        Send Request
+                    </button>
+                </td>
+            </tr>
+        {% endfor %}
+        <!--
+        <tr>
+            <td>
+                <div class="d-flex align-items-center">
+                    <img
+                            src="https://mdbootstrap.com/img/new/avatars/6.jpg"
+                            class="rounded-circle"
+                            alt=""
+                            style="width: 45px; height: 45px"
+                    />
+                    <div class="ms-3">
+                        <p class="fw-bold mb-1">Alex Ray</p>
+                        <p class="text-muted mb-0">alex.ray@gmail.com</p>
+                    </div>
+                </div>
+            </td>
+            <td>
+                <p class="fw-normal mb-1">Consultant</p>
+                <p class="text-muted mb-0">Finance</p>
+            </td>
+            <td>
+        <span class="badge badge-primary rounded-pill d-inline"
+        >Onboarding</span
+        >
+            </td>
+            <td>Junior</td>
+            <td>
+                <button
+                        type="button"
+                        class="btn btn-link btn-rounded btn-sm fw-bold"
+                        data-mdb-ripple-color="dark"
+                >
+                    Edit
+                </button>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div class="d-flex align-items-center">
+                    <img
+                            src="https://mdbootstrap.com/img/new/avatars/7.jpg"
+                            class="rounded-circle"
+                            alt=""
+                            style="width: 45px; height: 45px"
+                    />
+                    <div class="ms-3">
+                        <p class="fw-bold mb-1">Kate Hunington</p>
+                        <p class="text-muted mb-0">kate.hunington@gmail.com</p>
+                    </div>
+                </div>
+            </td>
+            <td>
+                <p class="fw-normal mb-1">Designer</p>
+                <p class="text-muted mb-0">UI/UX</p>
+            </td>
+            <td>
+                <span class="badge badge-warning rounded-pill d-inline">Awaiting</span>
+            </td>
+            <td>Senior</td>
+            <td>
+                <button
+                        type="button"
+                        class="btn btn-link btn-rounded btn-sm fw-bold"
+                        data-mdb-ripple-color="dark"
+                >
+                    Edit
+                </button>
+            </td>
+        </tr>
+        !-->
+        </tbody>
+
+    </table>
+
+    <div class="modal fade" id="exampleModalToggle" aria-hidden="true"
+         aria-labelledby="exampleModalToggleLabel" tabindex="-1"
+         style="backdrop-filter: blur(10px)">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header" style="background: #75b798">
+                    <h1 class="modal-title fs-5" id="exampleModalToggleLabel">Send Ad Request</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                    <form action="/ad_request/create" class="form1" method="post" enctype="multipart/form-data" id="addForm">
+                        <div class="form-floating mb-3">
+                            <input name="budget" type="number" class="form-control"
+                                   id="inputBudget" placeholder="Password">
+                            <label for="inputBudget" class="form-label "> Budget (₹) </label>
+                        </div>
+                        <div class="form-floating mb-3">
+                                <textarea name="message" type="text" class="form-control"
+                                          id="inputAbout" placeholder="description"></textarea>
+                            <label for="inputAbout" class="form-label "> Message </label>
+                        </div>
+
+                        <div class="form-floating mb-3">
+                            <select name="camp" class="form-select" aria-label="select Role" id="inputType">
+                                    {% for cmp in cmps %}
+                                    	<option value={{ cmp.id }}>{{ cmp.title }}</option>
+                                    {% endfor %}
+                            </select>
+                            <label for="inputType" class="form-label "> Select Campaign </label>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="submit" form="addForm" class="btn btn-primary" data-bs-dismiss="modal">Send
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

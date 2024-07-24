@@ -13,7 +13,7 @@
             <tr>
                 <th>ID</th>
                 <th>Tile</th>
-                <th>Budget </th>
+                <th>Budget</th>
                 <th>Description</th>
                 <th>Start Date</th>
                 <th>End Date</th>
@@ -22,18 +22,19 @@
             </thead>
             <tbody class="table-group-divider text-center">
             {% for cmp in cmps %}
-                {#                sponsors#}
-{#                {{ sponsor }}#}
-                                <tr>
-                                    <td>{{ cmp.id }}</td>
-                                    <td>{{ cmp.title }}</td>
-                                    <td>{{ cmp.budget }}</td>
-                                    <td>{{ cmp.description }}</td>
-                                    <td>{{ cmp.start_date }}</td>
-                                    <td>{{ cmp.end_date }}</td>
-                                    <td><span class="badge text-bg-primary">completed</span></td>
-                                    <td><button class="btn btn-secondary">View</button></td>
-                                </tr>
+                <tr>
+                    <td>{{ cmp.id }}</td>
+                    <td>{{ cmp.title }}</td>
+                    <td>{{ cmp.budget }}</td>
+                    <td>{{ cmp.description }}</td>
+                    <td>{{ cmp.start_date }}</td>
+                    <td>{{ cmp.end_date }}</td>
+                    <td><span class="badge text-bg-primary">completed</span></td>
+                    <td>
+                        <button class="btn btn-secondary" hx-get="{{ url_for("campaigns.view_campaign", id=cmp.id) }}"
+                                hx-trigger="click" hx-target="#content">View</button>
+                    </td>
+                </tr>
             {% endfor %}
             </tbody>
         </table>
@@ -42,7 +43,7 @@
     <div class="d-flex">
         <div class="modal fade" id="exampleModalToggle" aria-hidden="true"
              aria-labelledby="exampleModalToggleLabel" tabindex="-1"
-        style="backdrop-filter: blur(15px)">
+             style="backdrop-filter: blur(15px)">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content" style="box-shadow: 11px 7px 11px 4px #0000006b; background-color: #ffffff2b">
                     <div class="modal-header" style="background: #75b798">
@@ -60,8 +61,13 @@
                             </div>
 
                             <div class="form-floating mb-3">
-                                <input name="type" type="text" class="form-control"
-                                       id="inputType" placeholder="Password">
+                                <select name="role" class="form-select" aria-label="select Role" id="inputType">
+                                    <option selected value="TECH">TECH</option>
+                                    <option value="FASHION">FASHION</option>
+                                    <option value="EDUCATIONAL">EDUCATIONAL</option>
+                                    <option value="TRANSPORTATION">TRANSPORTATION</option>
+
+                                </select>
                                 <label for="inputType" class="form-label "> Type </label>
                             </div>
 
@@ -89,7 +95,10 @@
                                 <label for="inputEndDate" class="form-label "> End Date </label>
                             </div>
 
-
+                            <div class=" form-floating mb-3">
+                                <label for="formFile" class="form-label">Image</label>
+                                <input name="image" class="form-control" type="file" id="formFile">
+                            </div>
                         </form>
 
                     </div>

@@ -36,16 +36,22 @@
         }
     </style>
 
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const tabs = document.querySelectorAll(".tab")
-
-            const currentPath = window.location.pathname.split("/").pop()
-        })
-    </script>
 {% endblock %}
 
 {% block content %}
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <img src="..." class="rounded me-2" alt="...">
+                <strong class="me-auto">Bootstrap</strong>
+                <small>11 mins ago</small>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body">
+                Hello, world! This is a toast message.
+            </div>
+        </div>
+    </div>
     <div style="    display: flex;flex-direction: row;">
 
         <div class="sidebar" style="visibility: hidden">
@@ -66,7 +72,7 @@
             </nav>
         </div>
         <div class="grid" id="content" style="align-content: center">
-            {% if session['role'] == 'influencer' %}
+            {% if session['role'] == 'Influencer' %}
                 I am influencer
 
                 <div class="card-body " style="display: flex; place-content: center">
@@ -79,7 +85,7 @@
                         </div>
 
                         <div class="mb-3">
-                            <label for="email" class="form-label">Your Email / Company Email</label>
+                            <label for="email" class="form-label">Your Email</label>
                             <input name="email" type="email" class="form-control" id="email"
                                    aria-describedby="emailHelp">
                         </div>
@@ -92,20 +98,24 @@
 
 
                         <div class="mb-3">
-                            <label for="Cname" class="form-label">Company Name</label>
-                            <input name="company_name" type="text" class="form-control" id="Cname">
+                            <label for="Cname" class="form-label">Gender</label>
+                            <input name="gender" type="text" class="form-control" id="Cname">
                         </div>
 
                         <div class="mb-3">
-                            <label for="website" class="form-label">Company Website</label>
-                            <input name="website" type="text" class="form-control" id="website">
+                            <label for="website" class="form-label">Channel / Website Link</label>
+                            <input name="link" type="text" class="form-control" id="website">
                         </div>
 
                         <div class="mb-3">
-                            <label for="industry" class="form-label">Industry</label>
-                            <input name="industry" type="text" class="form-control" id="industry">
+                            <label for="industry" class="form-label">Niche</label>
+                            <input name="niche" type="text" class="form-control" id="industry">
                         </div>
 
+                        <div class="mb-3">
+                            <label for="formFile" class="form-label">Default file input example</label>
+                            <input name="file" class="form-control" type="file" id="formFile">
+                        </div>
 
                         <button type="submit" class="btn btn-primary" style="justify-self: center">Submit</button>
                     </form>
@@ -113,7 +123,7 @@
 
             {% endif %}
 
-            {% if session['role'] == 'sponsor' %}
+            {% if session['role'] == 'Sponsor' %}
 
                 <div class="card-body " style="display: flex; place-content: center">
 
@@ -147,11 +157,21 @@
                             <input name="website" type="text" class="form-control" id="website">
                         </div>
 
-                        <div class="mb-3">
+                        <!-- <div class="mb-3">
                             <label for="industry" class="form-label">Industry</label>
                             <input name="industry" type="text" class="form-control" id="industry">
-                        </div>
+                        </div> -->
 
+                        <div class="form-floating mb-3">
+                            <select name="industry" class="form-select" aria-label="select Role" id="inputType">
+                                <option selected value="TECH">TECH</option>
+                                <option value="FASHION">FASHION</option>
+                                <option value="EDUCATIONAL">EDUCATIONAL</option>
+                                <option value="TRANSPORTATION">TRANSPORTATION</option>
+
+                            </select>
+                            <label for="inputType" class="form-label "> Type </label>
+                        </div>
 
                         <button type="submit" class="btn btn-primary" style="justify-self: center">Submit</button>
                     </form>

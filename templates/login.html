@@ -1,19 +1,21 @@
 {% extends 'base.html' %}
 
-{% block title %}Name{% endblock %}
+{% block title %}Login{% endblock %}
 
 {% block head %}
     {{ super() }}
     <style>
-    body {
-        {#display: flex;#}
-        {#flex-direction: column;#}
-        {#gap: 5px;#}
-        display: grid;
-        grid-template-rows: 100px 100px 100px;
-        font-family: var(--font-poppins), serif;
-    }
+        body {
+        {#display: flex;#}{#flex-direction: column;#}{#gap: 5px;#} display: grid;
+            grid-template-rows: 100px 100px 100px;
+            font-family: var(--font-poppins), serif;
+        }
     </style>
+
+    <script type="text/javascript">
+        const toastTrigger = document.getElementById('formbtn')
+        const toast = document.getElementById('toast_')
+    </script>
 {% endblock %}
 
 {% block content %}
@@ -35,7 +37,22 @@
                 <a href="/auth/signup" class="btn btn-primary">New User</a>
             </form>
 
+        </div>
+    </div>
 
+    <div class="msg">
+
+        <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" id="toast_" data-delay="3000">
+            <div class="toast-header">
+                <strong class="me-auto">Bootstrap</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body">
+                {% for message in get_flashed_messages() %}
+                    {{ message }}
+                    d
+                {% endfor %}
+            </div>
         </div>
     </div>
 {% endblock %}

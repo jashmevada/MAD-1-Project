@@ -7,17 +7,16 @@ from models.model import Campaign, Sponsor
 bp = Blueprint('campaigns', __name__, url_prefix='/campaigns')
 
 
-@bp.route("/get")
-def get_campaigns():
-    campaigns = Campaign.query.all()
-    print(campaigns)
-    return campaigns
+def get_campaigns(username):
+    # campaigns = Campaign.query.all()
+    # campaigns = Campaign.query.get_or_404(username)
+    campagings = Campaign.query.filter(Campaign.sponsor_id == Sponsor.query.get(username).user_id).all()
+    # print(campaigns)
+    return campagings
 
 
-@bp.route('/add', methods=['GET', 'POST'])
 def add_campaign(campaign: Campaign):
-    if (campaign.title.isascii() and campaign.description.isascii()
-        and type(campaign.start_date)) == datetime:
+    if (campaign.title.isascii() and campaign.description.isascii() and type(campaign.start_date)) == datetime:
 
         db.session.add(campaign)
         db.session.commit()
@@ -25,16 +24,12 @@ def add_campaign(campaign: Campaign):
         raise "Not a valid campaign"
 
 
-@bp.route('/', methods=['GET', 'POST'])
+@bp.route('/t', methods=['GET', 'POST'])
 def render_campaigns():
-    session['tab'] = "campaigns"
-    if request.method == 'POST':
-        print("GOT POST request")
-
-    return redirect(url_for("dashboard", username=session['username']))
+    return render_template("Dashboard/campaigns.html", active_tab="campaigns", cmps=get_campaigns(session['username']))
 
 
-@bp.route('/test', methods=['GET', 'POST'])
+@bp.route('/', methods=['GET', 'POST']) # create
 def render_test():
     print(session)
     date_format = "%Y-%m-%d"
@@ -54,10 +49,15 @@ def render_test():
         sponsor.active_campaigns += 1
         add_campaign(camp)
 
-        return render_template("Dashboard/campaigns.html", active_tab="campaigns", cmps=get_campaigns())
+        return render_template("Dashboard/campaigns.html", active_tab="campaigns",
+                               cmps=get_campaigns(session['username']))
 
-    return render_template("Dashboard/campaigns.html", active_tab="campaigns", cmps=get_campaigns())
-
+    return render_template("Dashboard/campaigns.html", active_tab="campaigns", cmps=get_campaigns(session['username']))
 
 # session["get_campaigns"] = get_campaigns
 
+
+@bp.route('/viewCampaign/<id>', methods=['GET', 'POST'])
+def view_campaign(id):
+    campaign = Campaign.query.get_or_404(id)
+    return render_template("sponsor/viewCampaign.html", camp=campaign)

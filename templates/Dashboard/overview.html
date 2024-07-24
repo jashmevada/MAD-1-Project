@@ -5,5 +5,16 @@
 {% endblock %}
 
 {% block tab_content %}
+    {% if role == 'influencer' %}
+    	{% block overview_block %}{% endblock %}
+    {% endif %}
+
+    {% if role == 'sponsor' %}
+
+    {% endif %}
+
+    {% if role == 'admin' %}
+
+    {% endif %}
 
 {% endblock %}

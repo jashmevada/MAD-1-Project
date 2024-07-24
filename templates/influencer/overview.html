@@ -1,0 +1,11 @@
+{% extends 'layouts/dashboard_layout.html' %}
+
+{% block title %}
+    Overview
+{% endblock %}
+{% block profile_pic %}
+    <img src="{{ url_for('static',filename="/uploads/" + img['image']) }}" alt="profile pic" width="65px" height="57px" style="border-right: 30px;">
+{% endblock %}
+{% block tab_content %}
+    I am Influencer
+{% endblock %}

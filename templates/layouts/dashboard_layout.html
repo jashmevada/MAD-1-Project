@@ -41,8 +41,7 @@
             position: relative;
             background: #dbdbdb;
             width: 100%;
-            {#width:  -webkit-fill-available;#}
-            margin: 2vh;
+        {#width:  -webkit-fill-available;#} margin: 2vh;
             border-radius: 1vh;
         }
     </style>
@@ -76,17 +75,41 @@
         <div class="sidebar">
             <nav class="navbar" style="justify-content: center">
                 <div class="profile" style="align-self: flex-start;width: fit-content; ">
-                    <img src="{{ url_for('static',filename='logo.svg') }}" alt="profile pic" width="31px" height="25px">
-                    <a href="{{ url_for ("profile", username=g.username) }}"
-                       style="background: none"> {{ session['username'] }}</a>
+                    {% block profile_pic %}
+{#                        {% if session['image_path'] != ''%}#}
+{#                        	<img src="{{ url_for('static',filename="/uploads/" + session['image_path']) }}" alt="profile pic" width="31px" height="25px">#}
+{#                        {% endif %} #}
+                        <img src="{{ url_for('static',filename='logo.svg') }}" alt="profile pic" width="31px" height="25px">
+                    {% endblock %}
+                    <a href="{{ url_for ("common.profile") }}"
+                       style="background: none" class="profile {% if active_tab == 'profile' %}active{% endif %}"> {{ session['username'] }}</a>
                 </div>
                 <div class="container-fluid" style="align-self: flex-start">
                     <div class="row m-2 gap-4">
-                        <a href="{{ url_for("common.render_test") }}" class="overview {% if active_tab == 'overview' %}active{% endif %}"> Overview </a>
-                        <a href="{{ url_for("campaigns.render_test") }}"
-                           class="campaigns {% if active_tab == 'campaigns' %}active{% endif %}"> Campaigns</a>
-                        <a href="/sponsor/find" class="find {% if active_tab == 'find' %}active{% endif %}"> Find</a>
-                        <a class="stats {% if active_tab == 'stats' %}active{% endif %}"> Stats</a>
+                        {% if  session['role'] == 'Sponsor' %}
+
+                            <a href="{{ url_for("common.overview") }}"
+                               class="overview {% if active_tab == 'overview' %}active{% endif %}"> Overview </a>
+                            <a href="/campaigns/"
+                               class="campaigns {% if active_tab == 'campaigns' %}active{% endif %}">My Campaigns</a>
+                            <a href="/sponsor/find" class="find {% if active_tab == 'find' %}active{% endif %}">
+                                Find</a>
+                            <a href="/ad_request" class="adrequest {% if active_tab == 'adrequest' %}active{% endif %}">
+                                Your Requests
+                            </a>
+                            <a class="stats {% if active_tab == 'stats' %}active{% endif %}"> Stats</a>
+
+                        {% endif %}
+
+                        {% if session['role'] == 'Influencer' %}
+
+                            <a href="{{ url_for("common.overview") }}"
+                               class="overview {% if active_tab == 'overview' %}active{% endif %}"> Overview </a>
+                            <a href="/influencer/find" class="find {% if active_tab == 'find' %}active{% endif %}"> Find</a>
+                            <a href="/influencer/ad_request"  class="adrequest {% if active_tab == 'adrequest' %}active{% endif %}"> Ad Request </a>
+                            <a href="/influencer/stats" class="stats {% if active_tab == 'stats' %}active{% endif %}"> Stats </a>
+
+                        {% endif %}
                     </div>
                 </div>
             </nav>

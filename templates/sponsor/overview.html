@@ -1,0 +1,15 @@
+{% extends 'layouts/dashboard_layout.html' %}
+
+{% block title %}
+	Overview
+{% endblock %}
+
+{% block tab_content %}
+    I am SPONSOR
+
+    <div class="container">
+        Number of currently active Campaigns : {{ user.active_campaigns }}
+    {{ session['active_state'] }}
+
+    </div>
+{% endblock %}
