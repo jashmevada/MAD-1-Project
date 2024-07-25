@@ -1,22 +1,22 @@
 from flask import Flask, render_template, request, redirect, session
 from flask_migrate import Migrate
+from flask_restful import Api
 
 from db.db import db
-from .models import (campaign, influencer, sponsor, adResquest)
+from models import (campaign, influencer, sponsor, adResquest)
 from controllers import auth
-from .controllers import common
+from controllers import common
 import utils
 
 app = Flask(__name__)
-
 
 app.config['SECRET_KEY'] = 'secret!'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test5.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['UPLOAD_FOLDER'] = utils.UPLOAD_FOLDER
 
-
 db.init_app(app)
+api = Api(app)
 
 migrate = Migrate(app, db)
 
@@ -44,6 +44,7 @@ def dashboard(username):
     else:
         # g.username = username
         return redirect("/auth/login")
+
 
 @app.route("/login_post", methods=['POST'])
 def req_form_data(form):

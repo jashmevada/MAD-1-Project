@@ -2,28 +2,41 @@ from flask import (Blueprint, request, session, flash, redirect, url_for, render
 
 from db.db import db
 from models.model import User, State
+from hashlib import sha512
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')
+
+
+# Utils -----------------------------------------------
+
+def hash_password(password):
+    return sha512(password.encode('utf-8')).hexdigest()
+
+
+# Routes ----------------------------------------------
 
 
 @bp.route("/login", methods=['GET', 'POST'])
 def login():
     print(request.form)
     if request.method == 'POST':
+        session.clear()
         user_ = User.query.filter_by(email=request.form['Email']).first()
         # print(user_.role)
-        if user_ is not None and user_.password == request.form['password']:
+        # if user_ is not None and user_.password == request.form['password']:
+        if user_ is not None and hash_password(request.form['password']) == user_.password:
             print("Logged in")
             session["username"] = user_.username
             session["role"] = user_.role
-            session['active_state'] = State(
-                user_id=user_.username,
-                role=user_.role
-            ).model_dump_json()
 
             print(session)
             flash("You were successfully logged in")
             return redirect(url_for("dashboard", username=user_.username))
+        elif user_ is None:
+            try:
+                user = User.query.filter_by(username=request.form['username']).first()
+            except Exception as e:
+                pass
         else:
             flash("Invalid Credentials")
             # return redirect(url_for("auth.login"))
@@ -37,7 +50,7 @@ def signup():
     if request.method == 'POST':
         user = User(
             username=request.form['username'],
-            password=request.form['password'],
+            password=hash_password(request.form['password']),  # request.form['password'],
             email=request.form['email'],
             role=request.form['role'],
         )
@@ -65,3 +78,12 @@ def signup():
         # if user and user.check_password(password):
 
     return render_template("signup.html")
+
+
+def validate_login(func):
+
+    def wrapper(*args, **kwargs):
+        if session.get("username") is None or session.get("role") is None:
+            return redirect(url_for("auth.login"))
+        else:
+            print("ok ok ok ok ok ok")

@@ -54,7 +54,7 @@ class Influencer(db.Model):
     gender: Mapped[str] = mapped_column()
     niche: Mapped[str] = mapped_column()
     channel: Mapped[str] = mapped_column(String)
-    email: Mapped[str] = mapped_column(ForeignKey("user.email"), primary_key=True)
+    email: Mapped[str] = mapped_column(ForeignKey("user.email"))
     image: Mapped[str] = mapped_column(String, nullable=True)
     ad_request: Mapped[List['AdRequest']] = relationship("AdRequest", backref="influencer", lazy=True)
     active_ad_request: Mapped[int] = mapped_column(default=0)
@@ -69,7 +69,9 @@ class Sponsor(db.Model):
     company_website: Mapped[str] = mapped_column()
     industry: Mapped[Industry] = mapped_column(Enum(Industry, name="industry"), nullable=False)  # SqliteEnum
     active_campaigns: Mapped[int] = mapped_column(default=0)
+
     campaigns: Mapped[List['Campaign']] = relationship('Campaign', backref='sponsor', lazy=True)
+    ad_request: Mapped[List['AdRequest']] = relationship(lazy=True)
 
 
 class Campaign(db.Model):
@@ -93,6 +95,8 @@ class AdRequest(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
     campaign_id: Mapped[int] = mapped_column(ForeignKey(Campaign.id))
     influencer_id = db.Column(db.ForeignKey('influencer.user_id'), nullable=False)
+    sponsor_id: Mapped[str] = mapped_column(ForeignKey(Sponsor.user_id, name="sponsor_id"),
+                                            nullable=True)  # :TODO set here null to False
     message: Mapped[str] = mapped_column()
     requirement: Mapped[bool] = mapped_column(default=False)
     payment_amount: Mapped[int] = mapped_column()
@@ -116,4 +120,3 @@ class State(BaseModel):
     def get_influencer(self):
         influencer = Influencer.query.filter_by(User.username == self.user_id).first()
         return influencer
-

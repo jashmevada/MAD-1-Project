@@ -29,7 +29,7 @@ def render_campaigns():
     return render_template("Dashboard/campaigns.html", active_tab="campaigns", cmps=get_campaigns(session['username']))
 
 
-@bp.route('/', methods=['GET', 'POST']) # create
+@bp.route('/', methods=['GET', 'POST'])  # create
 def render_test():
     print(session)
     date_format = "%Y-%m-%d"
@@ -54,10 +54,11 @@ def render_test():
 
     return render_template("Dashboard/campaigns.html", active_tab="campaigns", cmps=get_campaigns(session['username']))
 
+
 # session["get_campaigns"] = get_campaigns
 
 
-@bp.route('/viewCampaign/<id>', methods=['GET', 'POST'])
-def view_campaign(id):
+@bp.route('/viewCampaign/<int:id>/<username>', methods=['GET', 'POST'])
+def view_campaign(id, username):
     campaign = Campaign.query.get_or_404(id)
     return render_template("sponsor/viewCampaign.html", camp=campaign)

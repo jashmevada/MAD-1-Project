@@ -1,0 +1,29 @@
+{% extends 'influencer/profile.html' %}
+
+{% block title %}
+    Profile Edit
+{% endblock %}
+
+{% block edit %}
+<form method="POST">
+    <div>
+        <label>Name</label>
+        <input type="text" name="firstName" value="{{ influencer.name }}">
+    </div>
+    <div class="form-group">
+        <label>Email</label>
+        <input type="text" name="lastName" value="{{ influencer.email }}">
+    </div>
+    <div class="form-group">
+        <label>Niche</label>
+        <input type="text" name="email" value="{{ influencer.niche }}">
+    </div>
+    <div class="form-group">
+        <label for="chn">Channel Link</label>
+        <input id='chn'  type="text" name="lastName" value="{{ influencer.channel }}">
+    </div>
+    <button class="btn">Submit</button>
+    <a href="/influencer/profile"> Cancel </a>
+</form>
+
+{% endblock %}

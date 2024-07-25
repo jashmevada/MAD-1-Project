@@ -4,7 +4,7 @@ import os
 
 import utils
 from db.db import db
-from controllers import common
+from controllers import common, auth
 from models import adResquest
 from models.model import Influencer, Campaign
 
@@ -77,7 +77,7 @@ def find():
 
 @bp.route('/ad_request')
 def ad_request():
-    return render_template('influencer/ad_request.html', active_tab="ad_req", reqs=adResquest.get_ad_for_influencer())
+    return render_template('influencer/ad_request.html', active_tab="ad_req", reqs=adResquest.get_ad_for_influencer(session['username']))
 
 
 @bp.route('/stats')
@@ -87,7 +87,17 @@ def stats():
 
 @bp.route('/profile')
 def profile():
-    return render_template('influencer/profile.html', active_tab="profile")
+    return render_template('influencer/profile.html', active_tab="profile",
+                           influencer=Influencer.query.get(session['username']))
+
+
+@bp.route('/profile/edit', methods=['GET', 'PUT'])
+def edit_profile():
+    if request.method == 'PUT':
+        print(request.form)
+
+    return render_template('influencer/profile_edit.html', active_tab='profile',
+                           influencer=Influencer.query.get(session['username']))
 
 
 @bp.route('/send_req', methods=['POST'])

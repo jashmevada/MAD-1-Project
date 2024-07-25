@@ -33,13 +33,13 @@
                     <td>{{ cmp.start_date }}</td>
                     <td>{{ cmp.end_date }}</td>
                     <td>
-                        <button class="btn btn-primary" hx-get="/campaigns/viewCampaign/{{ cmp.id }}"
+                        <button class="btn btn-primary" hx-get="/campaigns/viewCampaign/{{ cmp.id }}/{{ session[''] }}"
                                 hx-trigger="click" hx-target="#mainContent">View
                         </button>
                     </td>
                 <td>
-                    <button id="req-btn" class="btn" style="background-color: var(--accent)" hx-post="/influencer/send_req" hx-swap="outerHTML:beforeend" hx-trigger="click" hx-target="this"
-                            {% if item.requested %} disabled{% endif %}>
+                    <button id="req-btn" class="btn" style="background-color: var(--accent)" hx-post="/influencer/send_req" hx-swap="outerHTML:beforeend" hx-trigger="click" hx-target="this">
+{#                            {% if cmp.requested %} disabled{% endif %}>#}
                         Send Request
                     </button>
                 </td>

@@ -58,8 +58,8 @@
             <nav class="navbar" style="justify-content: center">
                 <div class="profile" style="align-self: flex-start;width: fit-content; ">
                     <img src="{{ url_for('static',filename='logo.svg') }}" alt="profile pic" width="31px" height="25px">
-                    <a href="{{ url_for ("profile", username=g.username) }}"
-                       style="background: none"> {{ g.username }}</a>
+                    <a href="{{ url_for ("common.profile", username=session['session']) }}"
+                       style="background: none"> {{ session['username'] }}</a>
                 </div>
                 <div class="container-fluid" style="align-self: flex-start">
                     <div class="row m-2 gap-4">

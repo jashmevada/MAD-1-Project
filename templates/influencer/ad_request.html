@@ -5,6 +5,63 @@
 {% endblock %}
 
 {% block tab_content %}
-	FKT YOU
+    FKT YOU
+    {{ reqs }}
+
+    <div class="container mt-5 table-responsive">
+        <h2 class="mb-4">Incoming Request</h2>
+        <div class="search m-3">
+            <label>Search
+                <input name="search">
+            </label>
+        </div>
+        <table class="table table-bordered ">
+            <thead class="text-center">
+            <tr>
+                <th>Sponsor ID</th>
+                <th>Campaign ID</th>
+                <th>Message</th>
+                <th>Budget</th>
+                <th> Actions</th>
+            </tr>
+            </thead>
+            <tbody class="table-group-divider text-center" id="data-table-body">
+            {#            {% for req in reqs %}#}
+            {#                <tr>#}
+            {#                    <td> {{ req.sponsor_id }} </td>#}
+            {#                    <td>{{ req.campaign_id }}</td>#}
+            {#                    <td>{{ req.message }}</td>#}
+            {#                    <td>{{ req.payment_amount }}</td>#}
+            {#                    <td></td>#}
+            {#                </tr>#}
+            {#            {% endfor %}#}
+            </tbody>
+        </table>
+    </div>
+    <div id="data_">
+
+    </div>
+    <script type="text/javascript">
+        document.addEventListener("DOMContentLoaded", async (event) => {
+            const tableBody = document.querySelector('#data-table-body');
+            await fetch("/ad_request/api/influencer/{{ session['username'] }}", {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(Object.entries(data))
+                    console.log(typeof (data))
+                    for (const dataKey in  Object.entries(data)) {
+                        console.log(dataKey)
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching data', error)
+                })
+        });
+
+    </script>
 {% endblock %}
 

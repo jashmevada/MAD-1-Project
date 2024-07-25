@@ -31,7 +31,7 @@
                     <td>{{ cmp.end_date }}</td>
                     <td><span class="badge text-bg-primary">completed</span></td>
                     <td>
-                        <button class="btn btn-secondary" hx-get="{{ url_for("campaigns.view_campaign", id=cmp.id) }}"
+                        <button class="btn btn-secondary" hx-get="{{ url_for("campaigns.view_campaign", id=cmp.id, username=session['username']) }}"
                                 hx-trigger="click" hx-target="#content">View</button>
                     </td>
                 </tr>

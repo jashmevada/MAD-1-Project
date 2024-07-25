@@ -4,39 +4,17 @@
     Find Influencer
 {% endblock %}
 
+{% block head %}
+    {{ super() }}
+
+{% endblock %}
+
 {% block tab_content %}
     <div class="mb-3 w-25">
         <label for="Cname" class="form-label">Search</label>
         <input name="search" type="text" class="form-control" id="Cname">
     </div>
 
-    {#    <div class="container mt-5 table-responsive">#}
-    {#        <h2 class="mb-4">Influencers</h2>#}
-    {#        <table class="table table-bordered ">#}
-    {#            <thead class="text-center">#}
-    {#            <tr>#}
-    {#                <th>User ID</th>#}
-    {#                <th>Name</th>#}
-    {#                <th>Gender</th>#}
-    {#                <th>Niche</th>#}
-    {#                <th>Email</th>#}
-    {#            </tr>#}
-    {#            </thead>#}
-    {#            <tbody class="table-group-divider text-center">#}
-    {#            {% for cmp in infs %}#}
-    {#                                sponsors#}
-    {#                {{ sponsor }}#}
-    {#                                <tr>#}
-    {#                                    <td>{{ cmp.user_id }}</td>#}
-    {#                                    <td>{{ cmp.name }}</td>#}
-    {#                                    <td>{{ cmp.gender }}</td>#}
-    {#                                    <td>{{ cmp.niche }}</td>#}
-    {#                                <td>{{ cmp.email }}</td>#}
-    {#                                </tr>#}
-    {#            {% endfor %}#}
-    {#            </tbody>#}
-    {#        </table>#}
-    {#    </div>#}
 
     <table class="table align-middle mb-0 bg-white mt-4 table-responsive container">
         <thead class="bg-light">
@@ -63,8 +41,8 @@
                                     class="rounded-circle"
                         />
                         <div class="ms-3">
-                            <p class="fw-bold mb-1">{{ cmp.name }} </p>
-                            <p class="text-muted mb-0">{{ cmp.email }}</p>
+                            <p class="fw-bold mb-1">{{ cmp.name }}  </p>
+                            <p class="text-muted mb-0">{{ cmp.email }} @{{ cmp.user_id }}</p>
                         </div>
                     </div>
                 </td>
@@ -76,7 +54,7 @@
                 <td><a href="{{ cmp.channel }}">{{ cmp.channel }} </a></td>
                 <td>
                     <button type="button" class="btn btn-primary btn-sm btn-rounded"
-                            data-bs-target="#exampleModalToggle" data-bs-toggle="modal">
+                            data-bs-target="#exampleModalToggle" data-bs-toggle="modal" onclick="infl_id = '{{ cmp.user_id }}'" id="btn_send">
                         Send Request
                     </button>
                 </td>
@@ -168,7 +146,8 @@
                 </div>
 
                 <div class="modal-body">
-                    <form action="/ad_request/create" class="form1" method="post" enctype="multipart/form-data" id="addForm">
+                    <form class="form1" method="post" enctype="multipart/form-data"
+                          id="addForm">
                         <div class="form-floating mb-3">
                             <input name="budget" type="number" class="form-control"
                                    id="inputBudget" placeholder="Password">
@@ -182,9 +161,9 @@
 
                         <div class="form-floating mb-3">
                             <select name="camp" class="form-select" aria-label="select Role" id="inputType">
-                                    {% for cmp in cmps %}
-                                    	<option value={{ cmp.id }}>{{ cmp.title }}</option>
-                                    {% endfor %}
+                                {% for cmp in cmps %}
+                                    <option value={{ cmp.id }}>{{ cmp.title }}</option>
+                                {% endfor %}
                             </select>
                             <label for="inputType" class="form-label "> Select Campaign </label>
                         </div>
@@ -198,4 +177,33 @@
             </div>
         </div>
     </div>
+    <div id="state">
+
+    </div>
+
+    <script type="text/javascript">
+            var infl_id = ""
+
+            document.getElementById("addForm").addEventListener('submit', function (e) {
+                {#e.preventDefault()#}
+                console.log(infl_id)
+
+                let budget = document.getElementById("inputBudget").value
+                let message = document.getElementById("inputAbout").value
+                let camp = document.getElementById("inputType").value
+
+
+                fetch(`/ad_request/api/sponsor/{{ session['username'] }}?influ_id=${infl_id}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({budget: budget, message: message, camp: camp, status: "pending"})
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log(data.message)
+                    })
+            })
+    </script>
 {% endblock %}
