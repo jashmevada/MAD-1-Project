@@ -86,6 +86,8 @@ class Campaign(db.Model):
     image: Mapped[str] = mapped_column(String, nullable=True)
     sponsor_id = db.Column(db.ForeignKey('sponsor.user_id'), nullable=False)
 
+    ad_request: Mapped[List['AdRequest']] = relationship("AdRequest", backref="campaign", lazy=True)
+
     @hybrid_property
     def get_date(self):
         return datetime.strftime(self.start_date, "%Y-%m-%d")
@@ -103,6 +105,9 @@ class AdRequest(db.Model):
     status: Mapped[str] = mapped_column(nullable=True)
     completed: Mapped[bool] = mapped_column(default=False)
     payment_done: Mapped[bool] = mapped_column(default=False)
+
+    # campaign = relationship('Campaign', backref='ad_request', lazy=True)
+    # influencer = relationship('Influencer', backref='ad_request', lazy=True)
 
 
 class State(BaseModel):

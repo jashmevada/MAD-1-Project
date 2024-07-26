@@ -51,11 +51,35 @@
             })
                 .then(response => response.json())
                 .then(data => {
-                    console.log(Object.entries(data))
-                    console.log(typeof (data))
-                    for (const dataKey in  Object.entries(data)) {
-                        console.log(dataKey)
-                    }
+                    {#console.log(Object.entries(data))#}
+                    {#console.log(typeof (data))#}
+
+                    const d = JSON.stringify(data)
+                    const jsondata = JSON.parse(d)
+                    console.log(jsondata)
+
+                    {#console.log(jsondata[jsondataKey])#}
+                    jsondata["sponsor_names"].forEach(e => {
+                        console.log(e)
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                                <td>${e}</td>
+
+                            `
+                        tableBody.appendChild(row);
+                    })
+                    jsondata.forEach(e => {
+                        console.log(e)
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                                <td ></td>
+<td >${e}</td>
+                            `
+                        tableBody.appendChild(row);
+                    })
+
+
+                    {#console.log(JSON.parse(data))#}
                 })
                 .catch(error => {
                     console.error('Error fetching data', error)

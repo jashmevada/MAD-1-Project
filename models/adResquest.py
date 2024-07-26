@@ -1,8 +1,9 @@
-from flask import (Blueprint, render_template, session, redirect, url_for, request)
-from flask_restful import Api, Resource, reqparse, output_json
+from flask import (Blueprint, render_template, session, redirect, url_for, request, jsonify, )
+from flask_restful import Api, Resource, reqparse
 from time import time
+from marshmallow import Schema, fields
+from pprint import pprint
 
-from db.db import db
 from models.model import *
 
 bp = Blueprint('ad_request', __name__, url_prefix='/ad_request')
@@ -11,10 +12,19 @@ bp = Blueprint('ad_request', __name__, url_prefix='/ad_request')
 
 api = Api(bp)
 parser = reqparse.RequestParser()
-parser.add_argument('budget', type=str)
+parser.add_argument('budget', type=str, location='args')
 parser.add_argument('message', type=str)
 parser.add_argument('camp', type=str)
 parser.add_argument('status', type=str)
+
+
+class InfluencerInfoSchema(Schema):
+    sponsor_names = fields.List(fields.Str())
+    campaign_title = fields.List(fields.Str())
+    message = fields.List(fields.Str())
+    description = fields.List(fields.Str())
+    budget_of_campaign = fields.List(fields.Int())
+    budget_from_sponsor = fields.List(fields.Int())
 
 
 class AdRequestSponsorAPI(Resource):
@@ -48,26 +58,36 @@ class AdRequestSponsorAPI(Resource):
         pass
 
 
+schema = InfluencerInfoSchema()
+
+
 class AdRequestInfluencerAPI(Resource):
+
     def get(self, username):
         # Response type : { sponsor name, campaign title, message, description of campaign ,budget, dates }
         t1 = time()
         req = get_ad_for_influencer(username)
-        sponsor_name = [Sponsor.query.filter_by(user_id=i.sponsor_id).all() for i in req]
+        # sponsor_name = [Sponsor.query.filter_by(user_id=i.sponsor_id).all() for i in req]
         camps = [[j for j in Campaign.query.filter_by(id=i.campaign_id).all()] for i in req]
         # print(camps)
         send_data = {
-            'sponsor_names': [[j.full_name for j in i] for i in sponsor_name],
-            'campaign_title': [[j.title for j in camp] for camp in camps],
+            'sponsor_names': [Sponsor.query.get(req[i].sponsor_id).full_name for i in range(len(req))],
+            # [[j.full_name for j in i] for i in sponsor_name],
+            'campaign_title': [req[i].campaign.title for i in range(len(req))],
+            # [[j.title for j in camp] for camp in camps],
             'message': [i.message for i in req],
-            'description': [[j.description for j in camp] for camp in camps] ,# [[j.description for j in Campaign.query.filter_by(id=i.campaign_id).all()] for i in req],
-            'budget_of_campaign': [[j.budget for j in camp] for camp in camps] ,#[[j.budget for j in Campaign.query.filter_by(id=i.campaign_id).all()] for i in req],
+            'description': [req[i].campaign.description for i in range(len(req))],
+            # [[j.description for j in camp] for camp in camps] ,# [[j.description for j in Campaign.query.filter_by(id=i.campaign_id).all()] for i in req],
+            'budget_of_campaign': [req[i].campaign.budget for i in range(len(req))],
+            # [[j.budget for j in camp] for camp in camps] ,#[[j.budget for j in Campaign.query.filter_by(id=i.campaign_id).all()] for i in req],
             'budget_from_sponsor': [i.payment_amount for i in req],
         }
         t2 = time()
-        print(t2-t1)
-        print(send_data)
-        return output_json(send_data, code=200)
+        print(t2 - t1)
+
+        pprint(schema.dump(send_data))
+        # print(req[1].campaign.title)
+        return schema.dump(send_data)
 
     def put(self):
         pass
