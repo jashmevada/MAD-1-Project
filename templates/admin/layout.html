@@ -1,0 +1,108 @@
+{% extends 'layouts/default.html' %}
+
+{% block title %}
+    Admin Dashboard
+{% endblock %}
+
+{% block head %}
+    {{ super() }}
+
+    <style>
+        .sidebar {
+            background: #a5a5a533;
+            width: 200px;
+            padding: 4px;
+            margin: 2vh;
+            height: 90vh;
+            border-radius: 1rem;
+            display: flex;
+        }
+
+        .sidebar a {
+            text-decoration: none;
+            color: black;
+            border-radius: 3px;
+            border-color: antiquewhite;
+        {#background: var(--accent);#} background: #dafff4;
+            padding: 6px;
+            text-align: center;
+            transition: background-color .5s;
+        }
+
+        .sidebar a:hover {
+            background-color: var(--accent);
+        }
+
+        .sidebar a.active {
+            background-color: var(--accent);
+        }
+
+        #content {
+            position: relative;
+            background: #dbdbdb;
+            width: 100%;
+        {#width:  -webkit-fill-available;#} margin: 2vh;
+            border-radius: 1vh;
+        }
+    </style>
+
+    <script defer>
+        let tab_name = ''
+        document.addEventListener("DOMContentLoaded", function () {
+            const tabs = document.querySelectorAll(".sidebar a")
+
+            for (let i = 0; i < tabs.length; i++) {
+                if (tabs[i]['classList'].contains('active')) {
+                    console.log("Active tabs is")
+                    console.log(tabs[i])
+
+                    tab_name = tabs[i]['className'][1]
+
+                } else {
+                }
+            }
+            console.log(tabs)
+            const currentPath = window.location.pathname.split("/").pop()
+            console.log("DOM fully loaded and parsed");
+
+        })
+    </script>
+{% endblock %}
+
+{% block content %}
+    <div style="display: flex;flex-direction: row;">
+
+        <div class="sidebar">
+            <nav class="navbar" style="justify-content: center">
+                <div class="profile" style="align-self: flex-start;width: fit-content; ">
+                    {% block profile_pic %}
+{#                        {% if session['image_path'] != ''%}#}
+{#                        	<img src="{{ url_for('static',filename="/uploads/" + session['image_path']) }}" alt="profile pic" width="31px" height="25px">#}
+{#                        {% endif %} #}
+                        <img src="{{ url_for('static',filename='logo.svg') }}" alt="profile pic" width="31px" height="25px">
+                    {% endblock %}
+                    <a href="{{ url_for ("common.profile") }}"
+                       style="background: none" class="profile {% if active_tab == 'profile' %}active{% endif %}"> {{ session['username'] }}</a>
+                </div>
+                <div class="container-fluid" style="align-self: flex-start">
+                    <div class="row m-2 gap-4">
+                            <a href="{{ url_for("common.overview") }}"
+                               class="overview {% if active_tab == 'overview' %}active{% endif %}"> Overview </a>
+                            <a href="/campaigns/"
+                               class="campaigns {% if active_tab == 'campaigns' %}active{% endif %}">My Campaigns</a>
+                            <a href="/sponsor/find" class="find {% if active_tab == 'find' %}active{% endif %}">
+                                Find</a>
+                            <a href="/ad_request" class="adrequest {% if active_tab == 'adrequest' %}active{% endif %}">
+                                Your Requests
+                            </a>
+                            <a class="stats {% if active_tab == 'stats' %}active{% endif %}"> Stats</a>
+
+                    </div>
+                </div>
+            </nav>
+        </div>
+        <div id="content">
+            {% block tab_content %}{% endblock %}
+        </div>
+    </div>
+{% endblock %}

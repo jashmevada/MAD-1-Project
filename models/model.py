@@ -26,26 +26,13 @@ class Industry(enum.Enum):
     OTHER = 4
 
 
-class SqliteEnum(TypeDecorator):
-    impl = db.String
-
-    def __init__(self, enumtype, *args, **kwargs):
-        self.enumtype = enumtype
-        super(SqliteEnum, self).__init__(*args, **kwargs)
-
-    def process_bind_param(self, value, dialect):
-        return value.value if value else None
-
-    def process_result_value(self, value, dialect):
-        return self.enumtype(value) if value else None
-
 
 class User(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     username: Mapped[str] = mapped_column(unique=True)
     email: Mapped[str] = mapped_column(unique=True)
     password: Mapped[str] = mapped_column()
-    role: Mapped[Role] = mapped_column(Enum("Influencer", "Sponsor", name="role"))
+    role: Mapped[Role] = mapped_column(Enum("Influencer", "Sponsor", 'Admin', name="role"))
 
 
 class Influencer(db.Model):
@@ -93,9 +80,10 @@ class Campaign(db.Model):
         return datetime.strftime(self.start_date, "%Y-%m-%d")
 
 
+# Ad Request which are send to influencer from sponsor side
 class AdRequest(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
-    campaign_id: Mapped[int] = mapped_column(ForeignKey(Campaign.id))
+    campaign_id: Mapped[int] = mapped_column(ForeignKey(Campaign.id ))
     influencer_id = db.Column(db.ForeignKey('influencer.user_id'), nullable=False)
     sponsor_id: Mapped[str] = mapped_column(ForeignKey(Sponsor.user_id, name="sponsor_id"),
                                             nullable=True)  # :TODO set here null to False
@@ -105,23 +93,4 @@ class AdRequest(db.Model):
     status: Mapped[str] = mapped_column(nullable=True)
     completed: Mapped[bool] = mapped_column(default=False)
     payment_done: Mapped[bool] = mapped_column(default=False)
-
-    # campaign = relationship('Campaign', backref='ad_request', lazy=True)
-    # influencer = relationship('Influencer', backref='ad_request', lazy=True)
-
-
-class State(BaseModel):
-    user_id: str
-    role: str
-
-    def get_campaign(self):
-        campaign = Campaign.query.filter_by(Sponsor.user_id == self.user_id).first()
-        return campaign
-
-    def get_sponsor(self):
-        sponsor = Sponsor.query.filter_by(User.username == self.user_id).first()
-        return sponsor
-
-    def get_influencer(self):
-        influencer = Influencer.query.filter_by(User.username == self.user_id).first()
-        return influencer
+    From: Mapped[str] = mapped_column(Enum("Influencer", "Sponsor", name="from"), nullable=True)

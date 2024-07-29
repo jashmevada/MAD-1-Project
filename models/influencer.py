@@ -6,7 +6,7 @@ import utils
 from db.db import db
 from controllers import common, auth
 from models import adResquest
-from models.model import Influencer, Campaign
+from models.model import *
 
 bp = Blueprint('influencer', __name__, url_prefix='/influencer')
 
@@ -18,15 +18,21 @@ def create_profile(username):
     if request.method == 'POST':
         print(request.form)
 
+        image_name = ''
+
         if 'file' not in request.files:
             flash('No file part')
             return redirect(request.url)
+
         file = request.files['file']
+
         if file.filename == '':
             flash('No selected file')
             return redirect(request.url)
+
         if file and utils.allowed_file(file.filename):
             filename = secure_filename(file.filename)
+            image_name = filename
             file.save(os.path.join(utils.UPLOAD_FOLDER, filename))
 
         infl = Influencer(
@@ -36,8 +42,9 @@ def create_profile(username):
             gender=request.form['gender'],
             channel=request.form['link'],
             niche=request.form['niche'],
-            image=file.filename
+            image=image_name
         )
+
         if create_influencers(infl):
             return common.overview()
         ok = True
@@ -77,7 +84,19 @@ def find():
 
 @bp.route('/ad_request')
 def ad_request():
-    return render_template('influencer/ad_request.html', active_tab="ad_req", reqs=adResquest.get_ad_for_influencer(session['username']))
+    req = adResquest.get_ad_for_influencer(session['username'])
+    # print(req[0].sponsor_id)
+    send_data = {
+        'sponsor_names': [Sponsor.query.get_or_404(req[i].sponsor_id).full_name for i in range(len(req))],
+        'campaign_title': [req[i].campaign.title for i in range(len(req))],
+        'message': [i.message for i in req],
+        'description': [req[i].campaign.description for i in range(len(req))],
+        'budget_of_campaign': [req[i].campaign.budget for i in range(len(req))],
+        'budget_from_sponsor': [i.payment_amount for i in req],
+        'status': [i.status for i in req],
+        'campaign_id': [req[i].campaign.id for i in range(len(req))],
+    }
+    return render_template('influencer/ad_request.html', active_tab="adrequest", data=send_data)
 
 
 @bp.route('/stats')
@@ -100,8 +119,37 @@ def edit_profile():
                            influencer=Influencer.query.get(session['username']))
 
 
-@bp.route('/send_req', methods=['POST'])
-def send_request():
+@bp.route('/send_req/<int:campaign_id>', methods=['POST'])
+def send_request(campaign_id):
+    ad_req = AdRequest(
+        campaign_id=campaign_id,
+        influencer_id=session['username'],
+        message=request.form['message'],
+        From='Influencer',
+        status='pending',
+        payment_amount = Campaign.query.get_or_404(campaign_id).budget
+    )
+
     return """        <div class="blue-tick">
             &#10004;  <!-- Unicode character for checkmark -->
         </div>"""
+
+
+@bp.route("/active_req/<int:campaign_id>", methods=['POST'])
+def active_req(campaign_id):
+    req = adResquest.get_ad_for_influencer(session['username'])
+    get_status = request.args['status']
+    set_status = ''
+
+    if get_status == 'accept':
+        set_status = 'active'
+    elif get_status == 'reject':
+        set_status = 'reject'
+
+    for i in range(len(req)):
+        if req[i].campaign_id == campaign_id:
+            print(req[i])
+            req[i].status = set_status
+            db.session.commit()
+
+    return """<div class="blue-tick">&#10004;</div>"""

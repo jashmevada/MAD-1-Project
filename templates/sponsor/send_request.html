@@ -1,10 +1,48 @@
 {% extends 'layouts/dashboard_layout.html' %}
 
 {% block title %}
-	Sent Requests
+    Sent Requests
 {% endblock %}
 
 {% block tab_content %}
-Request Tab
-    {{ reqs }}
+    Request Tab
+    {#    {{ reqs }}#}
+    <div class="container mt-5 table-responsive">
+        <table class="table table-bordered ">
+            <thead class="text-center">
+            <tr>
+                <th>Influencer Name</th>
+                <th>Campaign Name</th>
+                <th>Status</th>
+                {#            <th>End Date</th>#}
+                {#            <th colspan="2">Actions</th>#}
+            </tr>
+            </thead>
+            <tbody class="table-group-divider text-center">
+            {% for cmp in range(reqs|length) %}
+                {% for r in range (reqs[cmp]|length) %}
+                    <tr>
+                        <td>{{ reqs[cmp][r].influencer.name }}</td>
+                        <td>{{ reqs[cmp][r].campaign.title }}</td>
+                        <td>{% if reqs[cmp][r].status == 'active' %}
+                            <span class="badge text-bg-success">Active</span>
+                        {% elif reqs[cmp][r].status == 'pending' %}
+                            <span class="badge text-bg-warning">Pending</span>
+                        {% else %}
+                            <span class="badge text-bg-danger">Rejected</span>
+
+                        {% endif %} </td>
+                    </tr>
+                {% endfor %}
+
+                <tr>
+                    {#                <td>{{ cmp }}</td>#}
+                    {#                <td>{{ cmp.budget }}</td>#}
+                    {#                <td>{{ cmp.start_date }}</td>#}
+                    {#                <td>{{ cmp.end_date }}</td>#}
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
 {% endblock %}

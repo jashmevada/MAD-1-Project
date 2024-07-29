@@ -8,10 +8,8 @@ bp = Blueprint('campaigns', __name__, url_prefix='/campaigns')
 
 
 def get_campaigns(username):
-    # campaigns = Campaign.query.all()
-    # campaigns = Campaign.query.get_or_404(username)
     campagings = Campaign.query.filter(Campaign.sponsor_id == Sponsor.query.get(username).user_id).all()
-    # print(campaigns)
+
     return campagings
 
 
@@ -34,10 +32,10 @@ def render_test():
     print(session)
     date_format = "%Y-%m-%d"
     if request.method == 'POST':
-        # sponsor = Sponsor.query.filter(Sponsor.user_id == session['username']).all()
         sponsor = Sponsor.query.get_or_404(session['username'])
         print(request.form, sponsor)
         print("GOT POST request")
+
         camp = Campaign(
             title=request.form['title'],
             description=request.form['description'],
@@ -46,6 +44,7 @@ def render_test():
             end_date=datetime.strptime(request.form['end_date'], date_format),
             sponsor_id=session['username'],
         )
+
         sponsor.active_campaigns += 1
         add_campaign(camp)
 

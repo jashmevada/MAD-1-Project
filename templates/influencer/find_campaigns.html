@@ -37,12 +37,13 @@
                                 hx-trigger="click" hx-target="#mainContent">View
                         </button>
                     </td>
-                <td>
-                    <button id="req-btn" class="btn" style="background-color: var(--accent)" hx-post="/influencer/send_req" hx-swap="outerHTML:beforeend" hx-trigger="click" hx-target="this">
-{#                            {% if cmp.requested %} disabled{% endif %}>#}
-                        Send Request
-                    </button>
-                </td>
+                    <td>
+                        <button id="req-btn" class="btn" style="background-color: var(--accent)"
+                                hx-post="/influencer/send_req/{{ cmp.id }}" hx-swap="outerHTML:beforeend"
+                                hx-trigger="click" hx-target="this">
+                            Send Request
+                        </button>
+                    </td>
                 </tr>
             {% endfor %}
             </tbody>

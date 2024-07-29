@@ -1,7 +1,7 @@
 from flask import (Blueprint, request, session, flash, redirect, url_for, render_template)
 
 from db.db import db
-from models.model import User, State
+from models.model import User
 from hashlib import sha512
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')
@@ -22,8 +22,7 @@ def login():
     if request.method == 'POST':
         session.clear()
         user_ = User.query.filter_by(email=request.form['Email']).first()
-        # print(user_.role)
-        # if user_ is not None and user_.password == request.form['password']:
+
         if user_ is not None and hash_password(request.form['password']) == user_.password:
             print("Logged in")
             session["username"] = user_.username
@@ -60,10 +59,6 @@ def signup():
             db.session.add(user)
             db.session.commit()
             session["username"] = user.username
-            session['active_state'] = State(
-                user_id=user.username,
-                role=user.role
-            ).model_dump_json()
 
         print(type(user_), user_)
         if user.role == 'Influencer':

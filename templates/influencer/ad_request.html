@@ -5,9 +5,7 @@
 {% endblock %}
 
 {% block tab_content %}
-    FKT YOU
-    {{ reqs }}
-
+    {{ data }}
     <div class="container mt-5 table-responsive">
         <h2 class="mb-4">Incoming Request</h2>
         <div class="search m-3">
@@ -18,74 +16,47 @@
         <table class="table table-bordered ">
             <thead class="text-center">
             <tr>
-                <th>Sponsor ID</th>
-                <th>Campaign ID</th>
+                <th>Sponsor Name</th>
+                <th>Campaign Title</th>
                 <th>Message</th>
+                <th>Description</th>
                 <th>Budget</th>
-                <th> Actions</th>
+                <th colspan="2">Actions</th>
             </tr>
             </thead>
             <tbody class="table-group-divider text-center" id="data-table-body">
-            {#            {% for req in reqs %}#}
-            {#                <tr>#}
-            {#                    <td> {{ req.sponsor_id }} </td>#}
-            {#                    <td>{{ req.campaign_id }}</td>#}
-            {#                    <td>{{ req.message }}</td>#}
-            {#                    <td>{{ req.payment_amount }}</td>#}
-            {#                    <td></td>#}
-            {#                </tr>#}
-            {#            {% endfor %}#}
+
+            {% for index in range(data['sponsor_names'] | length) %}
+                <tr>
+                    <td>{{ data['sponsor_names'][index] }}</td>
+                    <td>{{ data['campaign_title'][index] }}</td>
+                    <td>{{ data['message'][index] }}</td>
+                    <td>{{ data['description'][index] }}</td>
+                    <td>{{ data['budget_from_sponsor'][index] }}</td>
+                    <td>
+                        {% if data['status'][index] == 'pending' %}
+                            <div class="buttn">
+                                <button class="btn btn-success btn-sm " {% if data['status'][index] != 'pending' %}
+                                        disabled{% endif %}
+                                        hx-post="/influencer/active_req/{{ data['campaign_id'][index] }}?status=accept"
+                                        hx-swap="outerHTML:beforeend" hx-trigger="click" hx-target="closest .buttn">
+                                        Accept
+                                </button>
+                                <button class="btn btn-danger btn-sm"  hx-post="/influencer/active_req/{{ data['campaign_id'][index] }}?status=reject"
+                                        hx-swap="outerHTML:beforeend" hx-trigger="click" hx-target="closest .buttn">
+                                    Reject
+                                </button>
+                            </div>
+                        {% else %}
+                            &#10004;
+                        {% endif %}
+
+                    </td>
+
+                </tr>
+            {% endfor %}
             </tbody>
         </table>
     </div>
-    <div id="data_">
-
-    </div>
-    <script type="text/javascript">
-        document.addEventListener("DOMContentLoaded", async (event) => {
-            const tableBody = document.querySelector('#data-table-body');
-            await fetch("/ad_request/api/influencer/{{ session['username'] }}", {
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            })
-                .then(response => response.json())
-                .then(data => {
-                    {#console.log(Object.entries(data))#}
-                    {#console.log(typeof (data))#}
-
-                    const d = JSON.stringify(data)
-                    const jsondata = JSON.parse(d)
-                    console.log(jsondata)
-
-                    {#console.log(jsondata[jsondataKey])#}
-                    jsondata["sponsor_names"].forEach(e => {
-                        console.log(e)
-                        const row = document.createElement('tr');
-                        row.innerHTML = `
-                                <td>${e}</td>
-
-                            `
-                        tableBody.appendChild(row);
-                    })
-                    jsondata.forEach(e => {
-                        console.log(e)
-                        const row = document.createElement('tr');
-                        row.innerHTML = `
-                                <td ></td>
-<td >${e}</td>
-                            `
-                        tableBody.appendChild(row);
-                    })
-
-
-                    {#console.log(JSON.parse(data))#}
-                })
-                .catch(error => {
-                    console.error('Error fetching data', error)
-                })
-        });
-
-    </script>
 {% endblock %}
 

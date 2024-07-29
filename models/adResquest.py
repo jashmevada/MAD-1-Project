@@ -12,7 +12,7 @@ bp = Blueprint('ad_request', __name__, url_prefix='/ad_request')
 
 api = Api(bp)
 parser = reqparse.RequestParser()
-parser.add_argument('budget', type=str, location='args')
+parser.add_argument('budget', type=str)
 parser.add_argument('message', type=str)
 parser.add_argument('camp', type=str)
 parser.add_argument('status', type=str)
@@ -85,7 +85,7 @@ class AdRequestInfluencerAPI(Resource):
         t2 = time()
         print(t2 - t1)
 
-        pprint(schema.dump(send_data))
+        # pprint(schema.dump(send_data))
         # print(req[1].campaign.title)
         return schema.dump(send_data)
 
