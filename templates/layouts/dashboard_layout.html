@@ -46,27 +46,6 @@
         }
     </style>
 
-    <script defer>
-        let tab_name = ''
-        document.addEventListener("DOMContentLoaded", function () {
-            const tabs = document.querySelectorAll(".sidebar a")
-
-            for (let i = 0; i < tabs.length; i++) {
-                if (tabs[i]['classList'].contains('active')) {
-                    console.log("Active tabs is")
-                    console.log(tabs[i])
-
-                    tab_name = tabs[i]['className'][1]
-
-                } else {
-                }
-            }
-            console.log(tabs)
-            const currentPath = window.location.pathname.split("/").pop()
-            console.log("DOM fully loaded and parsed");
-
-        })
-    </script>
 {% endblock %}
 
 {% block content %}

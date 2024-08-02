@@ -6,6 +6,7 @@ from db.db import db
 from models import (campaign, influencer, sponsor, adResquest)
 from controllers import auth
 from controllers import common
+from controllers import admin
 import utils
 
 app = Flask(__name__)
@@ -14,6 +15,8 @@ app.config['SECRET_KEY'] = 'secret!'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test5.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['UPLOAD_FOLDER'] = utils.UPLOAD_FOLDER
+
+# app.config.from
 
 db.init_app(app)
 api = Api(app)
@@ -69,6 +72,7 @@ app.register_blueprint(sponsor.bp)
 app.register_blueprint(campaign.bp)
 app.register_blueprint(common.bp)
 app.register_blueprint(adResquest.bp)
+app.register_blueprint(admin.bp)
 
 if __name__ == '__main__':
     app.run()  # debug=True

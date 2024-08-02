@@ -8,3 +8,16 @@
 - htmx
 - flask sqlalchemy
 - flask restfull
+
+### Completed Work 
+- [x] Dashboard for Sponsor and Influencer 
+- [x] Campaigns (adding , editing, sending request, view)
+- [x] 
+
+### Pending Work
+-[ ] Admin
+- [ ] Ad Request
+- [ ] Stats 
+- [ ] Profile Edit
+- [ ] Proper Login System 
+- [ ] 

@@ -33,8 +33,8 @@
                     <td>{{ cmp.start_date }}</td>
                     <td>{{ cmp.end_date }}</td>
                     <td>
-                        <button class="btn btn-primary" hx-get="/campaigns/viewCampaign/{{ cmp.id }}/{{ session[''] }}"
-                                hx-trigger="click" hx-target="#mainContent">View
+                        <button class="btn btn-primary" hx-get="/influencer/view?id={{ cmp.id }}"
+                                hx-trigger="click" hx-target="#content">View
                         </button>
                     </td>
                     <td>

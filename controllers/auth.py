@@ -49,7 +49,7 @@ def signup():
     if request.method == 'POST':
         user = User(
             username=request.form['username'],
-            password=hash_password(request.form['password']),  # request.form['password'],
+            password=hash_password(request.form['password']),
             email=request.form['email'],
             role=request.form['role'],
         )
@@ -76,9 +76,11 @@ def signup():
 
 
 def validate_login(func):
-
+    print(func)
     def wrapper(*args, **kwargs):
         if session.get("username") is None or session.get("role") is None:
             return redirect(url_for("auth.login"))
         else:
             print("ok ok ok ok ok ok")
+    
+    return wrapper

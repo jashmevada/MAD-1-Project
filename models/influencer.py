@@ -3,7 +3,7 @@ from werkzeug.utils import secure_filename
 import os
 
 import utils
-from db.db import db
+
 from controllers import common, auth
 from models import adResquest
 from models.model import *
@@ -153,3 +153,12 @@ def active_req(campaign_id):
             db.session.commit()
 
     return """<div class="blue-tick">&#10004;</div>"""
+
+
+@auth.validate_login
+@bp.route("/view")
+def view():
+    _id = request.args.get('id')
+
+    c = Campaign.query.get_or_404(_id)
+    return render_template('influencer/viewCamps.html', camp=c)

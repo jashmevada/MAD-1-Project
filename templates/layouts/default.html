@@ -29,9 +29,13 @@
 
 <nav class="content-wrapper" style="align-items: center">
     <div class="content-wrapper-child"></div>
-    <div class="ellipse-parent">
-        {#          <div class="frame-child"></div>#}
+    <div class="ellipse-parent" style="align-items: center">
+        <div class="frame-child">
+            <img src="{{ url_for('static',filename='logo.svg') }}" alt="profile pic"
+                 style="width: inherit; height: inherit">
+        </div>
         <div class="company-name-wrapper">
+
             <a class="company-name">Influx Connect</a>
         </div>
     </div>

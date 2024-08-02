@@ -78,7 +78,7 @@
                     {% block profile_pic %}
 {#                        {% if session['image_path'] != ''%}#}
 {#                        	<img src="{{ url_for('static',filename="/uploads/" + session['image_path']) }}" alt="profile pic" width="31px" height="25px">#}
-{#                        {% endif %} #}
+{#                        {% endif %}#}
                         <img src="{{ url_for('static',filename='logo.svg') }}" alt="profile pic" width="31px" height="25px">
                     {% endblock %}
                     <a href="{{ url_for ("common.profile") }}"
@@ -88,12 +88,12 @@
                     <div class="row m-2 gap-4">
                             <a href="{{ url_for("common.overview") }}"
                                class="overview {% if active_tab == 'overview' %}active{% endif %}"> Overview </a>
-                            <a href="/campaigns/"
-                               class="campaigns {% if active_tab == 'campaigns' %}active{% endif %}">My Campaigns</a>
-                            <a href="/sponsor/find" class="find {% if active_tab == 'find' %}active{% endif %}">
-                                Find</a>
-                            <a href="/ad_request" class="adrequest {% if active_tab == 'adrequest' %}active{% endif %}">
-                                Your Requests
+                            <a href="/admin/campaigns"
+                               class="campaigns {% if active_tab == 'campaigns' %}active{% endif %}">All Campaigns</a>
+                            <a href="/admin/sponsor" class="find {% if active_tab == 'find' %}active{% endif %}">
+                                Sponsors</a>
+                            <a href="/admin/influ" class="adrequest {% if active_tab == 'adrequest' %}active{% endif %}">
+                                Influencers
                             </a>
                             <a class="stats {% if active_tab == 'stats' %}active{% endif %}"> Stats</a>
 
