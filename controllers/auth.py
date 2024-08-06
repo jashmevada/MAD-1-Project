@@ -22,7 +22,7 @@ def login():
     if request.method == 'POST':
         session.clear()
         user_ = User.query.filter_by(email=request.form['Email']).first()
-
+ 
         if user_ is not None and hash_password(request.form['password']) == user_.password:
             print("Logged in")
             session["username"] = user_.username
@@ -55,32 +55,26 @@ def signup():
         )
         user_ = User.query.filter_by(username=user.username).first()
 
-        if user_ is None:
+        if user_ is None and User.query.filter_by(email=request.form['email']).first() is None:
+            print("OK added user in DB")
             db.session.add(user)
             db.session.commit()
             session["username"] = user.username
-
+        else:
+            return "Hello World!-"
+        
         print(type(user_), user_)
+        
         if user.role == 'Influencer':
             session['role'] = 'Influencer'
             return redirect(url_for("influencer.create_profile", username=user.username))
+        
         elif user.role == 'Admin':
             pass
+        
         elif user.role == 'Sponsor':
             session['role'] = 'Sponsor'
             return redirect(url_for("sponsor.create_profile", username=user.username))
-        # user = User.query.filter_by(username=username).first()
-        # if user and user.check_password(password):
+
 
     return render_template("signup.html")
-
-
-def validate_login(func):
-    print(func)
-    def wrapper(*args, **kwargs):
-        if session.get("username") is None or session.get("role") is None:
-            return redirect(url_for("auth.login"))
-        else:
-            print("ok ok ok ok ok ok")
-    
-    return wrapper

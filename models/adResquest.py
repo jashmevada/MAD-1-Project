@@ -2,7 +2,7 @@ from flask import (Blueprint, render_template, session, redirect, url_for, reque
 from flask_restful import Api, Resource, reqparse
 from time import time
 from marshmallow import Schema, fields
-from pprint import pprint
+#from pprint import pprint
 
 from models.model import *
 
@@ -14,9 +14,9 @@ api = Api(bp)
 parser = reqparse.RequestParser()
 parser.add_argument('budget', type=str)
 parser.add_argument('message', type=str)
-parser.add_argument('camp', type=str)
+parser.add_argument('camp', type=int)
 parser.add_argument('status', type=str)
-
+parser.add_argument('sp_id', type=str)
 
 class InfluencerInfoSchema(Schema):
     sponsor_names = fields.List(fields.Str())
@@ -92,8 +92,26 @@ class AdRequestInfluencerAPI(Resource):
     def put(self):
         pass
 
-    def post(self):
-        pass
+    def post(self, username):
+        args = parser.parse_args()
+        print(args)
+
+        data = AdRequest(
+            campaign_id=args['camp'],
+            influencer_id=username,
+            message=args['message'],
+            payment_amount=args['budget'],
+            status=args['status'],
+            sponsor_id=args['sp_id'],
+            From='Influencer'
+        )
+        print(data)
+        try:
+            db.session.add(data)
+            db.session.commit() 
+            return {"status": "success"}, 201
+        except Exception as e:
+            return {"Error": e}, 401
 
     def delete(self):
         pass

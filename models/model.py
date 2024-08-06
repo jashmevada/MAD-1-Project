@@ -80,7 +80,7 @@ class Campaign(db.Model):
         return datetime.strftime(self.start_date, "%Y-%m-%d")
 
 
-# Ad Request which are send to influencer from sponsor side
+
 class AdRequest(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
     campaign_id: Mapped[int] = mapped_column(ForeignKey(Campaign.id ))

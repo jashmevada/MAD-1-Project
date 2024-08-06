@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, session
 from flask_migrate import Migrate
 from flask_restful import Api
+from logging.config import dictConfig
 
 from db.db import db
 from models import (campaign, influencer, sponsor, adResquest)
@@ -9,6 +10,7 @@ from controllers import common
 from controllers import admin
 import utils
 
+
 app = Flask(__name__)
 
 app.config['SECRET_KEY'] = 'secret!'
@@ -16,7 +18,6 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test5.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['UPLOAD_FOLDER'] = utils.UPLOAD_FOLDER
 
-# app.config.from
 
 db.init_app(app)
 api = Api(app)

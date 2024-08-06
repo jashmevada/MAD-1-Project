@@ -1,11 +1,26 @@
 {% extends 'layouts/dashboard_layout.html' %}
 
 {% block title %}
-    Find Campaigns
+    Active Requests
 {% endblock %}
-    
+
+{% block head %}
+    {{ super() }}
+    <style>
+        #welcome {
+            width: 50%;
+            height: calc(12% * 1.618);
+            align-self: center;
+        }
+        #content{
+            display: flex;
+            flex-direction: row;
+        }
+    </style>
+{% endblock %}
+
 {% block tab_content %}
-    <!-- {{ data }} -->
+
     <div class="container mt-5 table-responsive">
         <h2 class="mb-4">Incoming Request</h2>
         <div class="search m-3">
@@ -18,31 +33,26 @@
             <tr>
                 <th>Sponsor Name</th>
                 <th>Campaign Title</th>
-                <th>Message</th>
-                <th>Description</th>
-                <th>Budget</th>
+
                 <th colspan="2">Actions</th>
             </tr>
             </thead>
             <tbody class="table-group-divider text-center" id="data-table-body">
 
-            {% for index in range(data['sponsor_names'] | length) %}
+            {% for i in reqs %}
                 <tr>
-                    <td>{{ data['sponsor_names'][index] }}</td>
-                    <td>{{ data['campaign_title'][index] }}</td>
-                    <td>{{ data['message'][index] }}</td>
-                    <td>{{ data['description'][index] }}</td>
-                    <td>{{ data['budget_from_sponsor'][index] }}</td>
+                    <td>{{ i.sponsor_id }}</td>
+                    <td>{{i.campaign_id}}</td>
+
                     <td>
-                        {% if data['status'][index] == 'pending' %}
+                        {% if i.completed != 'false' %}
                             <div class="buttn">
-                                <button class="btn btn-success btn-sm " {% if data['status'][index] != 'pending' %}
-                                        disabled{% endif %}
-                                        hx-post="/influencer/active_req/{{ data['campaign_id'][index] }}?status=accept"
+                                <button class="btn btn-success btn-sm " {% if i.completed == 'true' %} disabled{% endif %}
+                                        hx-post="/influencer/"
                                         hx-swap="outerHTML:beforeend" hx-trigger="click" hx-target="closest .buttn">
                                         Accept
                                 </button>
-                                <button class="btn btn-danger btn-sm"  hx-post="/influencer/active_req/{{ data['campaign_id'][index] }}?status=reject"
+                                <button class="btn btn-danger btn-sm"  hx-post="/influencer/"
                                         hx-swap="outerHTML:beforeend" hx-trigger="click" hx-target="closest .buttn">
                                     Reject
                                 </button>
@@ -52,11 +62,11 @@
                         {% endif %}
 
                     </td>
-
                 </tr>
             {% endfor %}
             </tbody>
         </table>
     </div>
-{% endblock %}
+    
 
+{% endblock %}

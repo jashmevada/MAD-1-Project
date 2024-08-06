@@ -3,9 +3,28 @@
 {% block title %}
     Overview
 {% endblock %}
-{% block profile_pic %}
-    <img src="{{ url_for('static',filename="/uploads/" + img['image']) }}" alt="profile pic" width="65px" height="57px" style="border-right: 30px;">
+
+{% block head %}
+    {{ super() }}
+    <style>
+        #welcome {
+            width: 50%;
+            height: calc(12% * 1.618);
+            align-self: center;
+        }
+        #content{
+            display: flex;
+            flex-direction: row;
+        }
+    </style>
 {% endblock %}
+
+{% block profile_pic %}
+    <img src="{{ url_for('static',filename="/uploads/" + user['image']) }}" alt="profile pic" width="65px" height="57px" style="border-right: 30px;">
+{% endblock %}
+
 {% block tab_content %}
-    I am Influencer
+    <div class=" card" id="welcome">
+    Welcome {{ user.name }}
+    </div>
 {% endblock %}

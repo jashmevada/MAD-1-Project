@@ -38,9 +38,8 @@
                         </button>
                     </td>
                     <td>
-                        <button id="req-btn" class="btn" style="background-color: var(--accent)"
-                                hx-post="/influencer/send_req/{{ cmp.id }}" hx-swap="outerHTML:beforeend"
-                                hx-trigger="click" hx-target="this">
+                        <button id="req-btn" class="btn" style="background-color: var(--accent)" 
+                        data-bs-target="#exampleModalToggle" data-bs-toggle="modal" onclick="data_arr = ['{{cmp.id}}','{{cmp.sponsor_id}}']; data_arr.push('{{cmp.id}}')">
                             Send Request
                         </button>
                     </td>
@@ -49,4 +48,60 @@
             </tbody>
         </table>
     </div>
+
+<div class="modal fade" id="exampleModalToggle" aria-hidden="true"
+    aria-labelledby="exampleModalToggleLabel" tabindex="-1"
+    style="backdrop-filter: blur(10px)">
+   <div class="modal-dialog modal-dialog-centered">
+       <div class="modal-content">
+           <div class="modal-header" style="background: #75b798">
+               <h1 class="modal-title fs-5" id="exampleModalToggleLabel">Send Ad Request</h1>
+               <button type="button" class="btn-close" data-bs-dismiss="modal"
+                       aria-label="Close"></button>
+           </div>
+
+           <div class="modal-body">
+               <form class="form1" method="post" enctype="multipart/form-data"
+                     id="addForm">
+                   <div class="form-floating mb-3">
+                       <input name="budget" type="number" class="form-control"
+                              id="inputBudget" placeholder="Password">
+                       <label for="inputBudget" class="form-label "> Budget (₹) </label>
+                   </div>
+                   <div class="form-floating mb-3">
+                           <textarea name="message" type="text" class="form-control"
+                                     id="inputAbout" placeholder="description"></textarea>
+                       <label for="inputAbout" class="form-label "> Message </label>
+                   </div>
+
+               </form>
+           </div>
+
+           <div class="modal-footer">
+               <button type="submit" form="addForm" class="btn btn-primary" data-bs-dismiss="modal">Send
+               </button>
+           </div>
+       </div>
+   </div>
+</div>
+   <script type="text/javascript">
+        var data_arr = []
+    document.getElementById("addForm").addEventListener('submit', function (e) {
+        
+        let budget = document.getElementById("inputBudget").value
+        let message = document.getElementById("inputAbout").value
+
+        fetch(`/ad_request/api/influncer/{{ session['username'] }}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({budget: budget, message: message, camp: data_arr[0], sp_id: data_arr})
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data)
+            })
+    })
+</script>
 {% endblock %}

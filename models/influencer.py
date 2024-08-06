@@ -73,10 +73,10 @@ def create_influencers(infl: Influencer):
 @bp.route('/overview')
 def overview():
     return render_template('influencer/overview.html', active_tab="overview",
-                           img=Influencer.query.filter(Influencer.user_id == session['username']).first())
+                           user=Influencer.query.filter(Influencer.user_id == session['username']).first())
 
 
-@bp.route('/find')
+@bp.route('/find', methods=['GET'])
 def find():
     get_public_camps = Campaign.query.filter(Campaign.visibility == 'public').all()
     return render_template("influencer/find_campaigns.html", active_tab="find", public_camps=get_public_camps)
@@ -121,15 +121,6 @@ def edit_profile():
 
 @bp.route('/send_req/<int:campaign_id>', methods=['POST'])
 def send_request(campaign_id):
-    ad_req = AdRequest(
-        campaign_id=campaign_id,
-        influencer_id=session['username'],
-        message=request.form['message'],
-        From='Influencer',
-        status='pending',
-        payment_amount = Campaign.query.get_or_404(campaign_id).budget
-    )
-
     return """        <div class="blue-tick">
             &#10004;  <!-- Unicode character for checkmark -->
         </div>"""
@@ -155,10 +146,24 @@ def active_req(campaign_id):
     return """<div class="blue-tick">&#10004;</div>"""
 
 
-@auth.validate_login
 @bp.route("/view")
 def view():
     _id = request.args.get('id')
 
     c = Campaign.query.get_or_404(_id)
     return render_template('influencer/viewCamps.html', camp=c)
+
+@bp.route("/in_request")
+def in_request():
+    return "dsf"
+
+@bp.route("/act_req")
+def all_active_requests():
+    get_all_act_req = AdRequest.query.filter_by(influencer_id=session.get('username'), status='active').all()
+    return render_template('influencer/active_req.html', reqs=get_all_act_req)
+
+@bp.route("/send_req")
+def send_ad_request():
+    data = AdRequest(
+        
+    )
