@@ -54,7 +54,8 @@
                 <td><a href="{{ cmp.channel }}">{{ cmp.channel }} </a></td>
                 <td>
                     <button type="button" class="btn btn-primary btn-sm btn-rounded"
-                            data-bs-target="#exampleModalToggle" data-bs-toggle="modal" onclick="infl_id = '{{ cmp.user_id }}'" id="btn_send">
+                            data-bs-target="#exampleModalToggle" data-bs-toggle="modal"
+                            onclick="infl_id = '{{ cmp.user_id }}'" id="btn_send">
                         Send Request
                     </button>
                 </td>
@@ -182,28 +183,27 @@
     </div>
 
     <script type="text/javascript">
-            var infl_id = ""
+        var infl_id = ""
 
-            document.getElementById("addForm").addEventListener('submit', function (e) {
-                {#e.preventDefault()#}
-                console.log(infl_id)
+        document.getElementById("addForm").addEventListener('submit', function (e) {
+            console.log(infl_id)
 
-                let budget = document.getElementById("inputBudget").value
-                let message = document.getElementById("inputAbout").value
-                let camp = document.getElementById("inputType").value
+            let budget = document.getElementById("inputBudget").value
+            let message = document.getElementById("inputAbout").value
+            let camp = document.getElementById("inputType").value
 
 
-                fetch(`/ad_request/api/sponsor/{{ session['username'] }}?influ_id=${infl_id}`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({budget: budget, message: message, camp: camp, status: "pending"})
-                })
-                    .then(response => response.json())
-                    .then(data => {
-                        console.log(data.message)
-                    })
+            fetch(`/ad_request/api/sponsor/{{ session['username'] }}?influ_id=${infl_id}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({budget: budget, message: message, camp: camp, status: "pending"})
             })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data.message)
+                })
+        })
     </script>
 {% endblock %}

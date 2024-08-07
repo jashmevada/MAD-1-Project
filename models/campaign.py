@@ -1,10 +1,13 @@
-from flask import (Blueprint, render_template, session, redirect, url_for, request)
+from flask import (Blueprint, render_template, session, redirect, url_for, request, render_template_string)
 from datetime import datetime
 
 from db.db import db
 from models.model import Campaign, Sponsor
+from controllers import common
 
 bp = Blueprint('campaigns', __name__, url_prefix='/campaigns')
+
+search_data = common.Search()
 
 
 def get_campaigns(username):
@@ -61,3 +64,4 @@ def render_test():
 def view_campaign(id, username):
     campaign = Campaign.query.get_or_404(id)
     return render_template("sponsor/viewCampaign.html", camp=campaign)
+

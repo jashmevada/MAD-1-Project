@@ -1,4 +1,5 @@
 from flask import (Blueprint, request, session, flash, redirect, url_for, render_template)
+import re
 
 from db.db import db
 from models.model import User
@@ -21,13 +22,18 @@ def login():
     print(request.form)
     if request.method == 'POST':
         session.clear()
-        user_ = User.query.filter_by(email=request.form['Email']).first()
- 
+
+        # user_ = User.query.filter_by(email=request.form['Email']).first()
+
+        if re.findall(r'@[a-z]*?\.', request.form['Email']):
+            user_ = User.query.filter_by(email=request.form['Email']).first()
+        else:
+            user_ = User.query.filter_by(username=request.form['Email']).first()
+
         if user_ is not None and hash_password(request.form['password']) == user_.password:
             print("Logged in")
             session["username"] = user_.username
             session["role"] = user_.role
-
             print(session)
             flash("You were successfully logged in")
             return redirect(url_for("dashboard", username=user_.username))
@@ -37,7 +43,8 @@ def login():
             except Exception as e:
                 pass
         else:
-            flash("Invalid Credentials")
+                flash("Invalid Credentials")
+
             # return redirect(url_for("auth.login"))
 
     return render_template("login.html")
@@ -58,7 +65,7 @@ def signup():
         if user_ is None and User.query.filter_by(email=request.form['email']).first() is None:
             print("OK added user in DB")
             db.session.add(user)
-            db.session.commit()
+            # db.session.commit()
             session["username"] = user.username
         else:
             return "Hello World!-"
@@ -75,6 +82,5 @@ def signup():
         elif user.role == 'Sponsor':
             session['role'] = 'Sponsor'
             return redirect(url_for("sponsor.create_profile", username=user.username))
-
 
     return render_template("signup.html")

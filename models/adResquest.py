@@ -1,10 +1,9 @@
 from flask import (Blueprint, render_template, session, redirect, url_for, request, jsonify, )
 from flask_restful import Api, Resource, reqparse
-from time import time
 from marshmallow import Schema, fields
-#from pprint import pprint
 
 from models.model import *
+from controllers.validation import ValidationData
 
 bp = Blueprint('ad_request', __name__, url_prefix='/ad_request')
 
@@ -12,11 +11,12 @@ bp = Blueprint('ad_request', __name__, url_prefix='/ad_request')
 
 api = Api(bp)
 parser = reqparse.RequestParser()
-parser.add_argument('budget', type=str)
-parser.add_argument('message', type=str)
+parser.add_argument('budget', type=str, required=True)
+parser.add_argument('message', type=str, required=True)
 parser.add_argument('camp', type=int)
 parser.add_argument('status', type=str)
 parser.add_argument('sp_id', type=str)
+
 
 class InfluencerInfoSchema(Schema):
     sponsor_names = fields.List(fields.Str())
@@ -47,7 +47,8 @@ class AdRequestSponsorAPI(Resource):
             message=args['message'],
             payment_amount=args['budget'],
             status=args['status'],
-            sponsor_id=session['username']
+            sponsor_id=session['username'],
+            From='Sponsor'
         )
 
         db.session.add(data)
@@ -65,28 +66,19 @@ class AdRequestInfluencerAPI(Resource):
 
     def get(self, username):
         # Response type : { sponsor name, campaign title, message, description of campaign ,budget, dates }
-        t1 = time()
         req = get_ad_for_influencer(username)
-        # sponsor_name = [Sponsor.query.filter_by(user_id=i.sponsor_id).all() for i in req]
-        camps = [[j for j in Campaign.query.filter_by(id=i.campaign_id).all()] for i in req]
-        # print(camps)
+
+        # camps = [[j for j in Campaign.query.filter_by(id=i.campaign_id).all()] for i in req]
+
         send_data = {
             'sponsor_names': [Sponsor.query.get(req[i].sponsor_id).full_name for i in range(len(req))],
-            # [[j.full_name for j in i] for i in sponsor_name],
             'campaign_title': [req[i].campaign.title for i in range(len(req))],
-            # [[j.title for j in camp] for camp in camps],
             'message': [i.message for i in req],
             'description': [req[i].campaign.description for i in range(len(req))],
-            # [[j.description for j in camp] for camp in camps] ,# [[j.description for j in Campaign.query.filter_by(id=i.campaign_id).all()] for i in req],
             'budget_of_campaign': [req[i].campaign.budget for i in range(len(req))],
-            # [[j.budget for j in camp] for camp in camps] ,#[[j.budget for j in Campaign.query.filter_by(id=i.campaign_id).all()] for i in req],
             'budget_from_sponsor': [i.payment_amount for i in req],
         }
-        t2 = time()
-        print(t2 - t1)
 
-        # pprint(schema.dump(send_data))
-        # print(req[1].campaign.title)
         return schema.dump(send_data)
 
     def put(self):
@@ -95,17 +87,18 @@ class AdRequestInfluencerAPI(Resource):
     def post(self, username):
         args = parser.parse_args()
         print(args)
+        ValidationData(dict(args))
 
         data = AdRequest(
             campaign_id=args['camp'],
             influencer_id=username,
             message=args['message'],
             payment_amount=args['budget'],
-            status=args['status'],
+            status='pending',
             sponsor_id=args['sp_id'],
             From='Influencer'
         )
-        print(data)
+
         try:
             db.session.add(data)
             db.session.commit() 

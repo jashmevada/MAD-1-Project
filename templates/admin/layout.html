@@ -45,28 +45,6 @@
             border-radius: 1vh;
         }
     </style>
-
-    <script defer>
-        let tab_name = ''
-        document.addEventListener("DOMContentLoaded", function () {
-            const tabs = document.querySelectorAll(".sidebar a")
-
-            for (let i = 0; i < tabs.length; i++) {
-                if (tabs[i]['classList'].contains('active')) {
-                    console.log("Active tabs is")
-                    console.log(tabs[i])
-
-                    tab_name = tabs[i]['className'][1]
-
-                } else {
-                }
-            }
-            console.log(tabs)
-            const currentPath = window.location.pathname.split("/").pop()
-            console.log("DOM fully loaded and parsed");
-
-        })
-    </script>
 {% endblock %}
 
 {% block content %}
@@ -79,7 +57,7 @@
 {#                        {% if session['image_path'] != ''%}#}
 {#                        	<img src="{{ url_for('static',filename="/uploads/" + session['image_path']) }}" alt="profile pic" width="31px" height="25px">#}
 {#                        {% endif %}#}
-                        <img src="{{ url_for('static',filename='logo.svg') }}" alt="profile pic" width="31px" height="25px">
+{#                        <img src="{{ url_for('static',filename='logo.svg') }}" alt="profile pic" width="31px" height="25px">#}
                     {% endblock %}
                     <a href="{{ url_for ("common.profile") }}"
                        style="background: none" class="profile {% if active_tab == 'profile' %}active{% endif %}"> {{ session['username'] }}</a>
@@ -90,9 +68,9 @@
                                class="overview {% if active_tab == 'overview' %}active{% endif %}"> Overview </a>
                             <a href="/admin/campaigns"
                                class="campaigns {% if active_tab == 'campaigns' %}active{% endif %}">All Campaigns</a>
-                            <a href="/admin/sponsor" class="find {% if active_tab == 'find' %}active{% endif %}">
+                            <a href="/admin/sponsors" class="sponsors {% if active_tab == 'sponsors' %}active{% endif %}">
                                 Sponsors</a>
-                            <a href="/admin/influ" class="adrequest {% if active_tab == 'adrequest' %}active{% endif %}">
+                            <a href="/admin/influencers" class="influ {% if active_tab == 'influ' %}active{% endif %}">
                                 Influencers
                             </a>
                             <a class="stats {% if active_tab == 'stats' %}active{% endif %}"> Stats</a>

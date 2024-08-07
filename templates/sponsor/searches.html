@@ -1,0 +1,22 @@
+{% for sponsor in spns %}
+    <tr>
+        <td style="text-align: left">
+
+            <div class="d-flex align-items-center">
+                <div class="ms-3">
+                    <p class="fw-bold mb-1">{{ sponsor.full_name }}  </p>
+                    <p class="text-muted mb-0">{{ sponsor.email }} @{{ sponsor.user_id }}</p>
+                </div>
+            </div>
+        </td>
+        <td>{{ sponsor.industry.name }}</td>
+        <td>{{ sponsor.phone_number }}</td>
+        <td>{{ sponsor.active_campaigns }}</td>
+        <td>
+            <button class="btn btn-primary"
+                    hx-get="/influencer/view?id={{ sponsor.id }}&sp_id={{ sponsor.sponsor_id }}"
+                    hx-trigger="click" hx-target="#content">View
+            </button>
+        </td>
+    </tr>
+{% endfor %}

@@ -2,13 +2,16 @@ from flask import (Blueprint, render_template, session, request)
 
 from models.model import *
 import controllers.common as common
+from models.campaign import get_campaigns
 
 bp = Blueprint('sponsor', __name__, url_prefix='/sponsor')
+
+search_data = common.Search()
 
 
 @bp.route("/<username>", methods=['GET', 'POST'])
 def create_profile(username):
-    print(session)
+
     if request.method == 'POST':
         print("GOT POST REQ")
         print(request.form)
@@ -24,9 +27,7 @@ def create_profile(username):
         )
 
         create_sponsor(spn)
-
         return common.overview()
-        # return redirect(url_for("common.overview"))
 
     return render_template("create_profile.html")
 
@@ -55,3 +56,8 @@ def find_influencer():
 @bp.route("/overview", methods=['GET'])
 def overview():
     return render_template("sponsor/overview.html", active_tab="overview", role='sponsor', user=Sponsor.query.get(session['username']))
+
+
+@bp.route('/stats')
+def stats():
+    return render_template("sponsor/stats.html", active_tab="stats", cmps=get_campaigns(session['username']))

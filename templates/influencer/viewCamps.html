@@ -1,4 +1,23 @@
+<div class="camp_container container">
+    <ul>
+        <li> Title : {{ camp.title }}</li>
+        Description : {{ camp.description }}
+    </ul>
+    Start Date : {{ camp.start_date }}
+
+    End Date: {{ camp.end_date }}
+
+    Budget : {{ camp.budget }}
+
+    Name of Sponsor: {{ spnr.full_name }}
+</div>
+
+<div class="spnr_container container-fluid">
+    This is Sponsor Area
+</div>
+
+<div class="action_container container-fluid">
+    Button Area
+
 <a href="{{ request.referrer }}">goback </a>
-
-
-Title : {{ camp.title }}
+</div>

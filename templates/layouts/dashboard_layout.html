@@ -44,6 +44,18 @@
         {#width:  -webkit-fill-available;#} margin: 2vh;
             border-radius: 1vh;
         }
+
+        .sidebar .profile a {
+            background: #0000002e;
+            /* border-radius: 10px; */
+            width: 100%;
+            box-shadow: #0000008c 0px 1px 7px 0px;
+            font-family: 'Inknut Antiqua', serif;
+            font-size: 12px;
+        }
+        .sidebar .profile a.active {
+            background-color: #0b5ed7;
+        }
     </style>
 
 {% endblock %}
@@ -53,15 +65,15 @@
 
         <div class="sidebar">
             <nav class="navbar" style="justify-content: center">
-                <div class="profile" style="align-self: flex-start;width: fit-content; ">
+                <div class="profile" style="align-self: flex-start;width: 70%; display: flex">
                     {% block profile_pic %}
-{#                        {% if session['image_path'] != ''%}#}
-{#                        	<img src="{{ url_for('static',filename="/uploads/" + session['image_path']) }}" alt="profile pic" width="31px" height="25px">#}
-{#                        {% endif %} #}
-                        <img src="{{ url_for('static',filename='logo.svg') }}" alt="profile pic" width="31px" height="25px">
+                        {#                        {% if session['image_path'] != ''%}#}
+                        {#                        	<img src="{{ url_for('static',filename="/uploads/" + session['image_path']) }}" alt="profile pic" width="31px" height="25px">#}
+                        {#                        {% endif %} #}
+                        {#                        <img src="{{ url_for('static',filename='logo.svg') }}" alt="profile pic" width="31px" height="25px">#}
                     {% endblock %}
                     <a href="{{ url_for ("common.profile") }}"
-                       style="background: none" class="profile {% if active_tab == 'profile' %}active{% endif %}"> {{ session['username'] }}</a>
+                       class="profile {% if active_tab == 'profile' %}active{% endif %}"> {{ session['username'] }}</a>
                 </div>
                 <div class="container-fluid" style="align-self: flex-start">
                     <div class="row m-2 gap-4">
@@ -76,7 +88,7 @@
                             <a href="/ad_request" class="adrequest {% if active_tab == 'adrequest' %}active{% endif %}">
                                 Your Requests
                             </a>
-                            <a class="stats {% if active_tab == 'stats' %}active{% endif %}"> Stats</a>
+                            <a href="/sponsor/stats" class="stats {% if active_tab == 'stats' %}active{% endif %}"> Stats</a>
 
                         {% endif %}
 
@@ -84,11 +96,16 @@
 
                             <a href="{{ url_for("common.overview") }}"
                                class="overview {% if active_tab == 'overview' %}active{% endif %}"> Overview </a>
-                            <a href="/influencer/find" class="find {% if active_tab == 'find' %}active{% endif %}"> Find</a>
-                            <a href="/influencer/ad_request"  class="adrequest {% if active_tab == 'adrequest' %}active{% endif %}"> Ad Request </a>
-                            <a href="/influencer/act_req" class="active_req {% if active_tab == 'stats' %}active{% endif %}"> Active Requests </a>
-                            <a href="/influencer/in_request" class="in_req {% if active_tab == 'stats' %}active{% endif %}"> Send Requests </a>
-                            <a href="/influencer/stats" class="stats {% if active_tab == 'stats' %}active{% endif %}"> Stats </a>
+                            <a href="/influencer/find" class="find {% if active_tab == 'find' %}active{% endif %}">
+                                Find</a>
+                            <a href="{{ url_for("influencer.ad_request") }}"
+                               class="adrequest {% if active_tab == 'adrequest' %}active{% endif %}"> Ad Request </a>
+                            <a href="/influencer/act_req"
+                               class="active_req {% if active_tab == 'active_req' %}active{% endif %}"> Active Requests </a>
+                            <a href="/influencer/in_request"
+                               class="in_req {% if active_tab == 'stats' %}active{% endif %}"> Send Requests </a>
+                            <a href="/influencer/stats" class="stats {% if active_tab == 'stats' %}active{% endif %}">
+                                Stats </a>
                         {% endif %}
                     </div>
                 </div>

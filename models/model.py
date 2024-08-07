@@ -26,7 +26,6 @@ class Industry(enum.Enum):
     OTHER = 4
 
 
-
 class User(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     username: Mapped[str] = mapped_column(unique=True)
@@ -45,6 +44,7 @@ class Influencer(db.Model):
     image: Mapped[str] = mapped_column(String, nullable=True)
     ad_request: Mapped[List['AdRequest']] = relationship("AdRequest", backref="influencer", lazy=True)
     active_ad_request: Mapped[int] = mapped_column(default=0)
+    follower: Mapped[int] = mapped_column(nullable=True)
 
 
 class Sponsor(db.Model):
@@ -78,7 +78,6 @@ class Campaign(db.Model):
     @hybrid_property
     def get_date(self):
         return datetime.strftime(self.start_date, "%Y-%m-%d")
-
 
 
 class AdRequest(db.Model):

@@ -1,14 +1,16 @@
-from flask import (Blueprint, render_template, session, request, flash, redirect)
+from flask import (Blueprint, render_template, session, request, flash, redirect, render_template_string)
 from werkzeug.utils import secure_filename
 import os
 
 import utils
 
-from controllers import common, auth
+from controllers import common
 from models import adResquest
 from models.model import *
 
 bp = Blueprint('influencer', __name__, url_prefix='/influencer')
+
+search_data = common.Search()
 
 
 @bp.route("/<username>", methods=['GET', 'POST'])
@@ -142,28 +144,62 @@ def active_req(campaign_id):
             print(req[i])
             req[i].status = set_status
             db.session.commit()
-
-    return """<div class="blue-tick">&#10004;</div>"""
+    if set_status == 'active':
+        return """<div class="blue-tick">&#10004;</div>"""
+    else:
+        return """<div class="red-tick" >&#10004;</div>"""
 
 
 @bp.route("/view")
 def view():
     _id = request.args.get('id')
-
+    _sponsor_id = request.args.get('sp_id')
+    sp = Sponsor.query.get_or_404(_sponsor_id)
     c = Campaign.query.get_or_404(_id)
-    return render_template('influencer/viewCamps.html', camp=c)
+    return render_template('influencer/viewCamps.html', camp=c, spnr=sp)
+
 
 @bp.route("/in_request")
 def in_request():
-    return "dsf"
+    return render_template('influencer/send_adrequest.html')
+
 
 @bp.route("/act_req")
 def all_active_requests():
     get_all_act_req = AdRequest.query.filter_by(influencer_id=session.get('username'), status='active').all()
-    return render_template('influencer/active_req.html', reqs=get_all_act_req)
+    return render_template('influencer/active_req.html', reqs=get_all_act_req, active_tab="active_req")
+
 
 @bp.route("/send_req")
 def send_ad_request():
-    data = AdRequest(
-        
-    )
+    pass
+
+
+@bp.route("/q_camp", methods=['POST'])
+def search_campaign():
+    q = request.form.get('search')
+    query = search_data.campaigns(q)
+    data = \
+        """
+            {% for cmp in public_camps %}
+                <tr>
+                    <td>{{ cmp.title }}</td>
+                    <td>{{ cmp.budget }}</td>
+                    <td>{{ cmp.start_date }}</td>
+                    <td>{{ cmp.end_date }}</td>
+                    <td>
+                        <button class="btn btn-primary" hx-get="/influencer/view?id={{ cmp.id }}&sp_id={{ cmp.sponsor_id }}"
+                                hx-trigger="click" hx-target="#content">View
+                        </button>
+                    </td>
+                    <td>
+                        <button id="req-btn" class="btn btn-sm" style="background-color: var(--accent)"
+                        data-bs-target="#exampleModalToggle" data-bs-toggle="modal" onclick="data_arr = ['{{cmp.id}}','{{cmp.sponsor_id}}']">
+                            Send Request
+                        </button>
+                    </td>
+                </tr>
+            {% endfor %}
+        """
+
+    return render_template_string(data, public_camps=query)

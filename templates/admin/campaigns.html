@@ -1,0 +1,51 @@
+{% extends 'admin/layout.html' %}
+
+{% block title %}
+    Find Campaigns
+{% endblock %}
+
+{% block tab_content %}
+
+    <div class="container mt-5 table-responsive">
+        <h2 class="mb-4">Campaigns Table</h2>
+        <div class="search m-3 d-flex" style="gap: 10px">
+
+            <h5 style="align-self: center">Search</h5>
+            <input class="form-control w-25" type="search"
+                   name="search" placeholder="Begin Typing To Search Users..."
+                   hx-post="/admin/q_camp"
+                   hx-trigger="input changed delay:500ms, search"
+                   hx-target="#Tbody"
+                   hx-indicator=".htmx-indicator">
+            <span class="htmx-indicator">Searching...</span>
+        </div>
+        <table class="table table-bordered ">
+            <thead class="text-center">
+            <tr>
+                <th>Title</th>
+                <th>Budget</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th colspan="2">Actions</th>
+            </tr>
+            </thead>
+            <tbody class="table-group-divider text-center" id="Tbody">
+            {% for cmp in public_camps %}
+                <tr>
+                    <td>{{ cmp.title }}</td>
+                    <td>{{ cmp.budget }}</td>
+                    <td>{{ cmp.start_date }}</td>
+                    <td>{{ cmp.end_date }}</td>
+                    <td>
+                        <button class="btn btn-primary"
+                                hx-get="/influencer/view?id={{ cmp.id }}&sp_id={{ cmp.sponsor_id }}"
+                                hx-trigger="click" hx-target="#content">View
+                        </button>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+{% endblock %}

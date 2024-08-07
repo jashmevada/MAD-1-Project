@@ -8,10 +8,16 @@
 
     <div class="container mt-5 table-responsive">
         <h2 class="mb-4">Campaigns Table</h2>
-        <div class="search m-3">
-            <label>Search
-                <input name="search">
-            </label>
+        <div class="search m-3 d-flex" style="gap: 10px">
+
+            <h5 style="align-self: center"> Search </h5>
+            <input class="form-control w-25" type="search"
+                   name="search" placeholder=""
+                   hx-post="/influencer/q_camp"
+                   hx-trigger="input changed delay:500ms, search"
+                   hx-target="#Tbody"
+                   hx-indicator=".htmx-indicator">
+            <span class="htmx-indicator">Searching...</span>
         </div>
         <table class="table table-bordered ">
             <thead class="text-center">
@@ -23,23 +29,23 @@
                 <th colspan="2">Actions</th>
             </tr>
             </thead>
-            <tbody class="table-group-divider text-center">
+            <tbody class="table-group-divider text-center" id="Tbody">
             {% for cmp in public_camps %}
-                sponsors
-                {{ cmp }}
+{#                sponsors#}
+{#                {{ cmp }}#}
                 <tr>
                     <td>{{ cmp.title }}</td>
                     <td>{{ cmp.budget }}</td>
                     <td>{{ cmp.start_date }}</td>
                     <td>{{ cmp.end_date }}</td>
                     <td>
-                        <button class="btn btn-primary" hx-get="/influencer/view?id={{ cmp.id }}"
+                        <button class="btn btn-primary" hx-get="/influencer/view?id={{ cmp.id }}&sp_id={{ cmp.sponsor_id }}"
                                 hx-trigger="click" hx-target="#content">View
                         </button>
                     </td>
                     <td>
-                        <button id="req-btn" class="btn" style="background-color: var(--accent)" 
-                        data-bs-target="#exampleModalToggle" data-bs-toggle="modal" onclick="data_arr = ['{{cmp.id}}','{{cmp.sponsor_id}}']; data_arr.push('{{cmp.id}}')">
+                        <button id="req-btn" class="btn btn-sm" style="background-color: var(--accent)"
+                        data-bs-target="#exampleModalToggle" data-bs-toggle="modal" onclick="data_arr = ['{{cmp.id}}','{{cmp.sponsor_id}}']">
                             Send Request
                         </button>
                     </td>
@@ -91,12 +97,12 @@
         let budget = document.getElementById("inputBudget").value
         let message = document.getElementById("inputAbout").value
 
-        fetch(`/ad_request/api/influncer/{{ session['username'] }}`, {
+        fetch(`/ad_request/api/influencer/{{ session['username'] }}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({budget: budget, message: message, camp: data_arr[0], sp_id: data_arr})
+            body: JSON.stringify({budget: budget, message: message, camp: data_arr[0], sp_id: data_arr[1]})
         })
             .then(response => response.json())
             .then(data => {

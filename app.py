@@ -64,6 +64,7 @@ def logout():
 
 @app.errorhandler(404)
 def not_found(error):
+    print(error)
     return render_template('error.html'), 404
 
 
