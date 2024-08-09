@@ -1,0 +1,78 @@
+{% extends 'layouts/dashboard_layout.html' %}
+
+{% block title %}
+    Profile Layout
+{% endblock %}
+
+{% block head %}
+    {{ super() }}
+
+    <style>
+        #content {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-evenly;
+        }
+        ._cont {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            grid-template-rows: 1fr 1fr 1fr;
+            gap: 10px 10px;
+            grid-auto-flow: row;
+            grid-template-areas:
+    "detail detail extra"
+    "detail detail extra"
+    "detail detail actions";
+
+            height: 85%;
+            margin: 10px;
+            padding: 10px;
+            align-self: center;
+            background: #0000004a;
+            border-radius: 15px;
+        }
+
+        .detail {
+            grid-area: detail;
+            border-radius: 15px;
+            box-shadow: #00000026 0 1px 20px 4px;
+        }
+
+        .extra {
+            grid-area: extra;
+            border-radius: 15px;
+            box-shadow: #00000026 0px 1px 20px 4px;
+        }
+
+        .actions {
+            grid-area: actions;
+                        border-radius: 15px;
+            box-shadow: #00000026 0 1px 20px 4px;
+        }
+
+    </style>
+{% endblock %}
+
+{% block tab_content %}
+
+    <div class="container _cont">
+        <div class="detail" style="background-color: white">
+            {% block details %}
+
+            {% endblock %}
+        </div>
+
+        <div class="extra" style="background-color: white">
+            {% block extra %}
+
+            {% endblock %}
+        </div>
+
+        <div class="actions" style="background-color: white">
+            {% block actions %}
+
+            {% endblock %}
+        </div>
+    </div>
+
+{% endblock %}

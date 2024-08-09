@@ -1,4 +1,4 @@
-{% extends 'layouts/default.html' %}
+{% extends 'layouts/base.html' %}
 
 {% block title %}
     Create Profile
@@ -96,12 +96,6 @@
                                    aria-describedby="emailHelp">
                         </div>
 
-
-                        <div class="mb-3">
-                            <label for="Cname" class="form-label">Gender</label>
-                            <input name="gender" type="text" class="form-control" id="Cname">
-                        </div>
-
                         <div class="form-floating mb-3">
                             <select name="gender" class="form-select" aria-label="select Gender" id="selectGender">
                                 <option selected value="M">Male</option>
@@ -117,7 +111,12 @@
 
                         <div class="mb-3">
                             <label for="industry" class="form-label">Niche</label>
-                            <input name="niche" type="text" class="form-control" id="industry">
+                            <select name="niche" class="form-select" aria-label="select Role" id="industry">
+                                <option selected value="TECH">TECH</option>
+                                <option value="FASHION">FASHION</option>
+                                <option value="EDUCATIONAL">EDUCATIONAL</option>
+                                <option value="TRANSPORTATION">TRANSPORTATION</option>
+                            </select>
                         </div>
 
                         <div class="mb-3">

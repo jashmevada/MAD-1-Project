@@ -1,4 +1,4 @@
-{% extends 'layouts/default.html' %}
+{% extends 'layouts/base.html' %}
 
 {% block title %}
     Dashboard
@@ -23,7 +23,7 @@
             color: black;
             border-radius: 3px;
             border-color: antiquewhite;
-        {#background: var(--accent);#} background: #dafff4;
+            background: #dafff4;
             padding: 6px;
             text-align: center;
             transition: background-color .5s;
@@ -41,20 +41,19 @@
             position: relative;
             background: #dbdbdb;
             width: 100%;
-        {#width:  -webkit-fill-available;#} margin: 2vh;
+            margin: 2vh;
             border-radius: 1vh;
         }
 
         .sidebar .profile a {
             background: #0000002e;
-            /* border-radius: 10px; */
             width: 100%;
             box-shadow: #0000008c 0px 1px 7px 0px;
             font-family: 'Inknut Antiqua', serif;
             font-size: 12px;
         }
         .sidebar .profile a.active {
-            background-color: #0b5ed7;
+            background-color: var(--accent);
         }
     </style>
 
@@ -67,10 +66,7 @@
             <nav class="navbar" style="justify-content: center">
                 <div class="profile" style="align-self: flex-start;width: 70%; display: flex">
                     {% block profile_pic %}
-                        {#                        {% if session['image_path'] != ''%}#}
-                        {#                        	<img src="{{ url_for('static',filename="/uploads/" + session['image_path']) }}" alt="profile pic" width="31px" height="25px">#}
-                        {#                        {% endif %} #}
-                        {#                        <img src="{{ url_for('static',filename='logo.svg') }}" alt="profile pic" width="31px" height="25px">#}
+
                     {% endblock %}
                     <a href="{{ url_for ("common.profile") }}"
                        class="profile {% if active_tab == 'profile' %}active{% endif %}"> {{ session['username'] }}</a>
@@ -103,7 +99,7 @@
                             <a href="/influencer/act_req"
                                class="active_req {% if active_tab == 'active_req' %}active{% endif %}"> Active Requests </a>
                             <a href="/influencer/in_request"
-                               class="in_req {% if active_tab == 'stats' %}active{% endif %}"> Send Requests </a>
+                               class="in_req {% if active_tab == 'in_req' %}active{% endif %}"> Send Requests </a>
                             <a href="/influencer/stats" class="stats {% if active_tab == 'stats' %}active{% endif %}">
                                 Stats </a>
                         {% endif %}

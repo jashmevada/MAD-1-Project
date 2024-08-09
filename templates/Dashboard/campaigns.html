@@ -17,8 +17,8 @@
                 <th>Description</th>
                 <th>Start Date</th>
                 <th>End Date</th>
-{#                <th>Status</th>#}
-                <th>View</th>
+                {#                <th>Status</th>#}
+                <th colspan="2">Actions</th>
             </tr>
             </thead>
             <tbody class="table-group-divider text-center">
@@ -30,10 +30,17 @@
                     <td>{{ cmp.description }}</td>
                     <td>{{ cmp.start_date }}</td>
                     <td>{{ cmp.end_date }}</td>
-{#                    <td><span class="badge text-bg-primary">completed</span></td>#}
+                    {#                    <td><span class="badge text-bg-primary">completed</span></td>#}
                     <td>
-                        <button class="btn btn-secondary" hx-get="{{ url_for("campaigns.view_campaign", id=cmp.id, username=session['username']) }}"
-                                hx-trigger="click" hx-target="#content">View</button>
+                        <button class="btn btn-secondary"
+                                hx-get="{{ url_for("campaigns.view_campaign", id=cmp.id, username=session['username']) }}"
+                                hx-trigger="click" hx-target="#content">View
+                        </button>
+                    </td>
+                    <td>
+                        <a href="/sponsor/delete_camp?camp_id={{ cmp.id }}">
+                            <button class="btn btn-danger">Delete</button>
+                        </a>
                     </td>
                 </tr>
             {% endfor %}

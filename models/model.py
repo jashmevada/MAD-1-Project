@@ -3,7 +3,6 @@ from db.db import db
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy import Enum, ForeignKey, TypeDecorator, Date, Integer, String
 from sqlalchemy.ext.hybrid import hybrid_property
-from pydantic import BaseModel
 
 import enum
 from datetime import datetime

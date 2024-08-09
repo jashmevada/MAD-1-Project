@@ -1,36 +1,194 @@
-{% extends 'layouts/dashboard_layout.html' %}
+{#-  {% extends 'layouts/dashboard_layout.html' %}
 
 {% block title %}
     Profile
 {% endblock %}
 
+{% block head %}
+    {{ super() }}
+
+    <style>
+        #content {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-evenly;
+        }
+
+        ._cont {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            grid-template-rows: 1fr 1fr 1fr;
+            gap: 10px 10px;
+            grid-auto-flow: row;
+            grid-template-areas:
+    "detail detail extra"
+    "detail detail extra"
+    "detail detail actions";
+
+            height: 85%;
+            margin: 10px;
+            padding: 5px;
+            align-self: center;
+        }
+
+        .detail {
+            grid-area: detail;
+            border-radius: 15px;
+        }
+
+        .extra {
+            grid-area: extra;
+            border-radius: 15px;
+        }
+
+        .actions {
+            grid-area: actions;
+            border-radius: 15px;
+        }
+
+        ._back {
+            background-color: #dafff4;
+            color: black;
+            transition: box-shadow .5s;
+        }
+
+        ._back:hover {
+            background-color: #76d2a7;
+            border-color: var(--primary);
+            box-shadow: #7e7e7e85 3px 3px 4px;
+        }
+        #action {
+                display: flex;
+            flex-direction: column;
+            padding: 10px;
+            gap: 1em;
+        }
+    </style>
+{% endblock %}
+
 {% block tab_content %}
 
-    Profile Page {{ influencer }}
+        Profile Page {{ influencer }}
 
-    Name : {{ influencer.name }}
-    Niche: {{ influencer.niche }}
-    Channel Link: {{ influencer.channel }}
-    active_ad_request: {{ influencer.active_ad_request }}
-    {% block edit %}
+        Name : {{ influencer.name }}
+        Niche: {{ influencer.niche }}
+        Channel Link: {{ influencer.channel }}
+        active_ad_request: {{ influencer.active_ad_request }}
+        {% block edit %}
+            <div>
+                <div><label>Name</label>: {{ influencer.name }}</div>
+                <div><label>Email</label>: {{ influencer.email }}</div>
+                <div><label>Niche</label>: {{ influencer.Niche }}</div>
+                <div><label>Channel Link</label>: {{ influencer.channel }}</div>
+            <div><label></label>: Joe</div>
+                <a href="/influencer/profile/edit">
+                    <button class="btn btn-primary"> Click To Edit</button>
+                </a>
+                <div class="container text-center">
+                    <div class="row row-cols-2">
+                        <div class="col">
+                            <div><label>Name</label>: {{ influencer.name }}</div>
+                        </div>
+                        <div class="col">Column</div>
+                        <div class="col">Column</div>
+                        <div class="col">Column</div>
+                    </div>
+                </div>
+            </div>
+        {% endblock %}
 
-    <div>
-        <div><label>Name</label>: {{ influencer.name }}</div>
+    <div class="container _cont">
+        <div class="detail" style="background-color: white">
+            {% block edit %}
+                <div style="margin: 10px">
+                    <div><label>Name</label>: {{ influencer.name }}</div>
+                    <div><label>Email</label>: {{ influencer.email }}</div>
+                    <div><label>Niche</label>: {{ influencer.Niche }}</div>
+                    <div><label>Channel Link</label>: {{ influencer.channel }}</div>
+
+                </div>
+            {% endblock %}
+        </div>
+        <div class="extra" style="background-color: white"></div>
+        <div class="actions" style="background-color: white">
+            <div id="action">
+                <a href="/influencer/profile/edit">
+                    <button class="btn btn-primary"> Click To Edit</button>
+                </a>
+
+                <a href="/influencer/overview">
+                    <button class="btn btn-primary _back"> Go Back</button>
+                </a>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+#}
+
+{% extends 'layouts/profile_layout.html' %}
+
+{% block head %}
+    {{ super() }}
+
+    <style>
+        ._back {
+            background-color: #dafff4;
+            color: black;
+            transition: box-shadow .5s;
+        }
+
+        ._back:hover {
+            background-color: #76d2a7;
+            border-color: var(--primary);
+            box-shadow: #7e7e7e85 3px 3px 4px;
+        }
+
+        #action {
+            display: flex;
+            flex-direction: column;
+            padding: 10px;
+            gap: 1em;
+        }
+    </style>
+
+{% endblock %}
+
+{% block details %}
+    <div style="margin: 10px">
+
+        <div class="image d-flex g-5" style="gap: 10px">
+            <img src="{{ url_for('static',filename="/uploads/" + influencer.image) }}" alt="profile pic"
+                 width="{{ 16*15 }}px" height="{{ 9*30 }}px" style="border-right: 30px;">
+{#            <div style="font-weight: 700; font-size: xx-large">{{  }}</div>#}
+            <div class="ms-3">
+                <p style="font-weight: 700; font-size: xx-large" class="fw-bold mb-1">{{ influencer.name }}  </p>
+                <p class="text-muted mb-0">@{{ influencer.user_id }}</p>
+            </div>
+        </div>
+
         <div><label>Email</label>: {{ influencer.email }}</div>
         <div><label>Niche</label>: {{ influencer.Niche }}</div>
         <div><label>Channel Link</label>: {{ influencer.channel }}</div>
-        {#        <div><label></label>: Joe</div>#}
-        <a href="/influencer/profile/edit">
-            <button class="btn btn-primary"> Click To Edit</button>
-        </a>
-    <div class="container text-center">
-  <div class="row row-cols-2">
-    <div class="col"><div><label>Name</label>: {{ influencer.name }}</div></div>
-    <div class="col">Column</div>
-    <div class="col">Column</div>
-    <div class="col">Column</div>
-  </div>
-</div>
+        <div><label>Follower</label>: {{ influencer.follower }}</div>
+        <div><label>Active Request</label>: {{ influencer.active_ad_request }}</div>
     </div>
-    {% endblock %}
+{% endblock %}
+
+{% block extra %}
+
+{% endblock %}
+
+{% block actions %}
+    <div id="action">
+        <a href="/influencer/profile/edit">
+            <button class="btn btn-primary">
+                Click To Edit
+            </button>
+        </a>
+
+        <a href="/influencer/overview">
+            <button class="btn btn-primary _back"> Go Back</button>
+        </a>
+    </div>
 {% endblock %}

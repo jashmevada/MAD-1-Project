@@ -31,21 +31,23 @@
             </thead>
             <tbody class="table-group-divider text-center" id="Tbody">
             {% for cmp in public_camps %}
-{#                sponsors#}
-{#                {{ cmp }}#}
+                {#                sponsors#}
+                {#                {{ cmp }}#}
                 <tr>
                     <td>{{ cmp.title }}</td>
                     <td>{{ cmp.budget }}</td>
                     <td>{{ cmp.start_date }}</td>
                     <td>{{ cmp.end_date }}</td>
                     <td>
-                        <button class="btn btn-primary" hx-get="/influencer/view?id={{ cmp.id }}&sp_id={{ cmp.sponsor_id }}"
+                        <button class="btn btn-primary"
+                                hx-get="/influencer/view?id={{ cmp.id }}&sp_id={{ cmp.sponsor_id }}"
                                 hx-trigger="click" hx-target="#content">View
                         </button>
                     </td>
                     <td>
                         <button id="req-btn" class="btn btn-sm" style="background-color: var(--accent)"
-                        data-bs-target="#exampleModalToggle" data-bs-toggle="modal" onclick="data_arr = ['{{cmp.id}}','{{cmp.sponsor_id}}']">
+                                data-bs-target="#exampleModalToggle" data-bs-toggle="modal"
+                                onclick="data_arr = ['{{ cmp.id }}','{{ cmp.sponsor_id }}']">
                             Send Request
                         </button>
                     </td>
@@ -55,59 +57,87 @@
         </table>
     </div>
 
-<div class="modal fade" id="exampleModalToggle" aria-hidden="true"
-    aria-labelledby="exampleModalToggleLabel" tabindex="-1"
-    style="backdrop-filter: blur(10px)">
-   <div class="modal-dialog modal-dialog-centered">
-       <div class="modal-content">
-           <div class="modal-header" style="background: #75b798">
-               <h1 class="modal-title fs-5" id="exampleModalToggleLabel">Send Ad Request</h1>
-               <button type="button" class="btn-close" data-bs-dismiss="modal"
-                       aria-label="Close"></button>
-           </div>
+    <div class="modal fade" id="exampleModalToggle" aria-hidden="true"
+         aria-labelledby="exampleModalToggleLabel" tabindex="-1"
+         style="backdrop-filter: blur(10px)">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header" style="background: #75b798">
+                    <h1 class="modal-title fs-5" id="exampleModalToggleLabel">Send Ad Request</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                </div>
 
-           <div class="modal-body">
-               <form class="form1" method="post" enctype="multipart/form-data"
-                     id="addForm">
-                   <div class="form-floating mb-3">
-                       <input name="budget" type="number" class="form-control"
-                              id="inputBudget" placeholder="Password">
-                       <label for="inputBudget" class="form-label "> Budget (₹) </label>
-                   </div>
-                   <div class="form-floating mb-3">
+                <div class="modal-body">
+                    <form class="form1" method="post" enctype="multipart/form-data"
+                          id="addForm">
+                        <div class="form-floating mb-3">
+                            <input name="budget" type="number" class="form-control"
+                                   id="inputBudget" placeholder="Password">
+                            <label for="inputBudget" class="form-label "> Budget (₹) </label>
+                        </div>
+                        <div class="form-floating mb-3">
                            <textarea name="message" type="text" class="form-control"
                                      id="inputAbout" placeholder="description"></textarea>
-                       <label for="inputAbout" class="form-label "> Message </label>
-                   </div>
+                            <label for="inputAbout" class="form-label "> Message </label>
+                        </div>
 
-               </form>
-           </div>
+                    </form>
+                </div>
 
-           <div class="modal-footer">
-               <button type="submit" form="addForm" class="btn btn-primary" data-bs-dismiss="modal">Send
-               </button>
-           </div>
-       </div>
-   </div>
-</div>
-   <script type="text/javascript">
+                <div class="modal-footer">
+                    <button type="submit" form="addForm" class="btn btn-primary" data-bs-dismiss="modal">Send
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div aria-live="polite" aria-atomic="true" class="position-relative" style="min-height: 200px;">
+        <div class="toast-container position-fixed top-0 end-0 p-3">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="toast align-items-center text-bg-{{ category }} border-0" role="alert"
+                             aria-live="assertive" aria-atomic="true" data-bs-delay="3000" id="toastMessage">
+                            <div class="d-flex">
+                                <div class="toast-body">
+                                    {{ message }}
+                                </div>
+                                <button type="button" class="btn-close btn-close-white me-2 m-auto"
+                                        data-bs-dismiss="toast" aria-label="Close"></button>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+        </div>
+    </div>
+    <script type="text/javascript">
         var data_arr = []
-    document.getElementById("addForm").addEventListener('submit', function (e) {
-        
-        let budget = document.getElementById("inputBudget").value
-        let message = document.getElementById("inputAbout").value
+        document.getElementById("addForm").addEventListener('submit', function (e) {
 
-        fetch(`/ad_request/api/influencer/{{ session['username'] }}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({budget: budget, message: message, camp: data_arr[0], sp_id: data_arr[1]})
-        })
-            .then(response => response.json())
-            .then(data => {
-                console.log(data)
+            let budget = document.getElementById("inputBudget").value
+            let message = document.getElementById("inputAbout").value
+
+            fetch(`/ad_request/api/influencer/{{ session['username'] }}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({budget: budget, message: message, camp: data_arr[0], sp_id: data_arr[1]})
             })
-    })
-</script>
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data)
+                })
+        })
+        window.onload = function () {
+            const toastEl = document.getElementById('toastMessage');
+            if (toastEl) {
+                const toast = new bootstrap.Toast(toastEl);
+                toast.show();
+            }
+        };
+    </script>
 {% endblock %}

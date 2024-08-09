@@ -1,20 +1,34 @@
-    {% extends 'layouts/dashboard_layout.html' %}
+{% extends 'layouts/dashboard_layout.html' %}
 
 {% block title %}
     Sent Requests
+{% endblock %}
+
+{% block head %}
+	{{ super() }}
+
+    <style>
+    #content {
+        display: grid;
+    }
+    </style>
+
 {% endblock %}
 
 {% block tab_content %}
     Request Tab
     {#    {{ reqs }}#}
     <div class="container mt-5 table-responsive">
-        <table class="table table-bordered ">
+
+        <table class="table table-bordered table-hover caption-top">
+            <caption><h3>Current Requests</h3></caption>
             <thead class="text-center">
             <tr>
                 <th>Influencer Name</th>
                 <th>Campaign Name</th>
+                <th>Start Date</th>
+                <th>End Date</th>
                 <th>Status</th>
-                {#            <th>End Date</th>#}
                 {#            <th colspan="2">Actions</th>#}
             </tr>
             </thead>
@@ -24,25 +38,70 @@
                     <tr>
                         <td>{{ reqs[cmp][r].influencer.name }}</td>
                         <td>{{ reqs[cmp][r].campaign.title }}</td>
-                        <td>{% if reqs[cmp][r].status == 'active' %}
-                            <span class="badge text-bg-success">Active</span>
-                        {% elif reqs[cmp][r].status == 'pending' %}
-                            <span class="badge text-bg-warning">Pending</span>
-                        {% else %}
-                            <span class="badge text-bg-danger">Rejected</span>
+                        <td>{{ reqs[cmp][r].campaign.start_date }}</td>
+                        <td>{{ reqs[cmp][r].campaign.end_date }}</td>
+                        <td>
+                            {% if reqs[cmp][r].status == 'active' %}
+                                <span class="badge text-bg-success">Active</span>
+                            {% elif reqs[cmp][r].status == 'pending' %}
+                                <span class="badge text-bg-warning">Pending</span>
+                            {% else %}
+                                <span class="badge text-bg-danger">Rejected</span>
+                            {% endif %}
 
-                        {% endif %} </td>
+                        </td>
                     </tr>
-                {% endfor %}
 
+                {% endfor %}
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <hr style="width: 85%; place-self: center">
+
+    <div class="container mt-3 table-responsive">
+
+
+        <table class="table table-bordered table-hover caption-top">
+        <caption><h3>Incoming Requests</h3></caption>
+            <thead class="text-center">
+            <tr>
+                <th>Influencer Name</th>
+                <th>Campaign Name</th>
+                <th colspan="2">Actions</th>
+            </tr>
+            </thead>
+            <tbody class="table-group-divider text-center" id="data-table-body">
+            {% for req in in_req %}
                 <tr>
-                    {#                <td>{{ cmp }}</td>#}
-                    {#                <td>{{ cmp.budget }}</td>#}
-                    {#                <td>{{ cmp.start_date }}</td>#}
-                    {#                <td>{{ cmp.end_date }}</td>#}
+                    <td>{{ req.influencer.name }}</td>
+                    <td>{{ req.campaign.title }}</td>
+
+                    <td>
+                        {% if req.status == 'pending' %}
+                            <div class="buttn">
+                                <button class="btn btn-success btn-sm " {% if req.status != 'pending' %}
+                                        disabled{% endif %}
+                                        hx-post="/"
+                                        hx-swap="outerHTML:beforeend" hx-trigger="click" hx-target="closest .buttn">
+                                    Accept
+                                </button>
+                                <button class="btn btn-danger btn-sm"
+                                        hx-post="/"
+                                        hx-swap="outerHTML:beforeend" hx-trigger="click" hx-target="closest .buttn">
+                                    Reject
+                                </button>
+                            </div>
+                        {% else %}
+                            &#10004;
+                        {% endif %}
+
+                    </td>
                 </tr>
             {% endfor %}
             </tbody>
         </table>
     </div>
+
 {% endblock %}

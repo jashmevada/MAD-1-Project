@@ -65,7 +65,7 @@ def signup():
         if user_ is None and User.query.filter_by(email=request.form['email']).first() is None:
             print("OK added user in DB")
             db.session.add(user)
-            # db.session.commit()
+            db.session.commit()
             session["username"] = user.username
         else:
             return "Hello World!-"

@@ -1,4 +1,4 @@
-{% extends 'layouts/default.html' %}
+{% extends 'layouts/base.html' %}
 
 {% block title %}
     Admin Dashboard
@@ -73,7 +73,7 @@
                             <a href="/admin/influencers" class="influ {% if active_tab == 'influ' %}active{% endif %}">
                                 Influencers
                             </a>
-                            <a class="stats {% if active_tab == 'stats' %}active{% endif %}"> Stats</a>
+                            <a  href="/admin/stats" class="stats {% if active_tab == 'stats' %}active{% endif %}"> Stats</a>
 
                     </div>
                 </div>

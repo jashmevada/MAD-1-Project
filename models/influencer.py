@@ -23,7 +23,7 @@ def create_profile(username):
         image_name = ''
 
         if 'file' not in request.files:
-            flash('No file part')
+            # flash('No file part')
             return redirect(request.url)
 
         file = request.files['file']
@@ -49,6 +49,11 @@ def create_profile(username):
 
         if create_influencers(infl):
             return common.overview()
+        else:
+            User.query.filter(User.id == session['username']).delete()
+            db.session.commit()
+            return redirect('/auth/login')
+
         ok = True
         session['image_path'] = file.filename
 
@@ -87,6 +92,7 @@ def find():
 @bp.route('/ad_request')
 def ad_request():
     req = adResquest.get_ad_for_influencer(session['username'])
+    print(req)
     # print(req[0].sponsor_id)
     send_data = {
         'sponsor_names': [Sponsor.query.get_or_404(req[i].sponsor_id).full_name for i in range(len(req))],
@@ -98,6 +104,7 @@ def ad_request():
         'status': [i.status for i in req],
         'campaign_id': [req[i].campaign.id for i in range(len(req))],
     }
+    print(send_data)
     return render_template('influencer/ad_request.html', active_tab="adrequest", data=send_data)
 
 
@@ -161,7 +168,7 @@ def view():
 
 @bp.route("/in_request")
 def in_request():
-    return render_template('influencer/send_adrequest.html')
+    return render_template('influencer/send_adrequest.html', active_tab='in_req')
 
 
 @bp.route("/act_req")

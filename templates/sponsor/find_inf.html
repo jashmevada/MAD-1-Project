@@ -10,13 +10,23 @@
 {% endblock %}
 
 {% block tab_content %}
-    <div class="mb-3 w-25">
-        <label for="Cname" class="form-label">Search</label>
-        <input name="search" type="text" class="form-control" id="Cname">
-    </div>
+    <div class="container mt-5 table-responsive">
+        <h2 class="mb-4">Influencers</h2>
+        <div class="search m-3 d-flex" style="gap: 10px">
+            <h5 style="align-self: center">
+                Search
+            </h5>
+            <input class="form-control w-25" type="search"
+                   name="search" placeholder="Begin Typing To Search Users..."
+                   hx-post="/admin/q_influ"
+                   hx-trigger="input changed delay:500ms, search"
+                   hx-target="#Tbody"
+                   hx-indicator=".htmx-indicator">
+            <span class="htmx-indicator">Searching...</span>
 
 
-    <table class="table align-middle mb-0 bg-white mt-4 table-responsive container">
+        </div>
+    <table class="table align-middle mb-0 bg-white mt-4 table-responsive container" id="Tbody">
         <thead class="bg-light">
         <tr>
             <th>Name</th>

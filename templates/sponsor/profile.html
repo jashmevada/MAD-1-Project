@@ -1,10 +1,63 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'layouts/profile_layout.html' %}
 
-</body>
-</html>
+{% block head %}
+    {{ super() }}
+
+    <style>
+        ._back {
+            background-color: #dafff4;
+            color: black;
+            transition: box-shadow .5s;
+        }
+
+        ._back:hover {
+            background-color: #76d2a7;
+            border-color: var(--primary);
+            box-shadow: #7e7e7e85 3px 3px 4px;
+        }
+
+        #action {
+            display: flex;
+            flex-direction: column;
+            padding: 10px;
+            gap: 1em;
+        }
+    </style>
+
+{% endblock %}
+
+{% block details %}
+    <div style="margin: 10px">
+
+        <div class="image d-flex g-5" style="gap: 10px">
+            <div class="ms-3">
+                <p style="font-weight: 700; font-size: xx-large" class="fw-bold mb-1">{{ sponsor.full_name }}  </p>
+                <p class="text-muted mb-0">@{{ sponsor.user_id }}</p>
+            </div>
+        </div>
+
+        <div><label>Email</label>: {{ sponsor.email }}</div>
+        <div><label>Niche</label>: {{ sponsor.industry }}</div>
+        <div><label>Company Name</label>: {{ sponsor.company_name }}</div>
+        <div><label>Website</label>: {{ sponsor.company_website }}</div>
+        <div><label>Active Campaigns</label>: {{ sponsor.active_campaigns }}</div>
+    </div>
+{% endblock %}
+
+{% block extra %}
+
+{% endblock %}
+
+{% block actions %}
+    <div id="action">
+        <a href="/sponsor/profile/edit">
+            <button class="btn btn-primary">
+                Click To Edit
+            </button>
+        </a>
+
+        <a href="/sponsor/overview">
+            <button class="btn btn-primary _back"> Go Back</button>
+        </a>
+    </div>
+{% endblock %}

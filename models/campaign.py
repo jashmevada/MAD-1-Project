@@ -31,7 +31,7 @@ def render_campaigns():
 
 
 @bp.route('/', methods=['GET', 'POST'])  # create
-def render_test():
+def camp_index():
     print(session)
     date_format = "%Y-%m-%d"
     if request.method == 'POST':
@@ -55,9 +55,6 @@ def render_test():
                                cmps=get_campaigns(session['username']))
 
     return render_template("Dashboard/campaigns.html", active_tab="campaigns", cmps=get_campaigns(session['username']))
-
-
-# session["get_campaigns"] = get_campaigns
 
 
 @bp.route('/viewCampaign/<int:id>/<username>', methods=['GET', 'POST'])

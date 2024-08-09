@@ -1,6 +1,6 @@
 from flask import (Blueprint, render_template, redirect, url_for, request, render_template_string)
 
-from models.model import Campaign, Sponsor, Influencer
+from models.model import *
 from controllers import common
 
 bp = Blueprint('admin', __name__, url_prefix='/admin')
@@ -11,6 +11,11 @@ search_data = common.Search()
 @bp.route('/overview')
 def overview():
     return render_template('admin/overview.html', active_tab="overview")
+
+
+@bp.route('/profile')
+def profile():
+    return render_template('admin/profile.html', active_tab="profile")
 
 
 @bp.route('/campaigns')
@@ -29,6 +34,7 @@ def all_sponsor_details():
 def all_influencers_details():
     all_influencers = Influencer.query.all()
     return render_template('admin/influencers.html', influencers=all_influencers, active_tab="influ")
+
 
 def stats():
     pass
@@ -104,3 +110,18 @@ def searches():
     q = request.form['search']
     _query = search_data.sponsors(q)
     return render_template('sponsor/searches.html', spns=_query)
+
+
+@bp.route('/stats')
+def stats():
+    # data: active ad request, campiangs ,
+    # no. of infl, spono.
+
+    data = {
+        'Count of Influencer': Influencer.query.count(),
+        'Count of Sponsors': Sponsor.query.count(),
+        'Count of Campaigns': Campaign.query.count(),
+        'Total Ad Request Running': AdRequest.query.count()
+    }
+
+    return render_template('admin/stats.html', active_tab="stats", data=data)

@@ -1,4 +1,4 @@
-from flask import (Blueprint, render_template, session, redirect, url_for, request, jsonify, )
+from flask import (Blueprint, render_template, session, redirect, url_for, request, flash)
 from flask_restful import Api, Resource, reqparse
 from marshmallow import Schema, fields
 
@@ -50,10 +50,13 @@ class AdRequestSponsorAPI(Resource):
             sponsor_id=session['username'],
             From='Sponsor'
         )
-
-        db.session.add(data)
-        db.session.commit()
-        return {"status": "success"}, 201
+        try:
+            db.session.add(data)
+            db.session.commit()
+            flash('Request submitted successfully!', 'success')
+            return {"status": "success"}, 201
+        except Exception as e:
+            return {"status": "failed", "message": str(e)}, 500
 
     def delete(self):
         pass
@@ -101,7 +104,8 @@ class AdRequestInfluencerAPI(Resource):
 
         try:
             db.session.add(data)
-            db.session.commit() 
+            db.session.commit()
+            flash('Request submitted successfully!', 'success')
             return {"status": "success"}, 201
         except Exception as e:
             return {"Error": e}, 401
@@ -124,8 +128,14 @@ def get_current_requests() -> list[AdRequest]:
     return [AdRequest.query.filter_by(campaign_id=i.id).all() for i in lst]
 
 
+def get_ad_request_for_sponsor(username):
+    query = AdRequest.query.filter_by(sponsor_id = Sponsor.query.get(username).user_id, From = 'Influencer').all()
+    print(query)
+    return query
+
+
 def get_ad_for_influencer(username) -> list[AdRequest]:
-    return AdRequest.query.filter_by(influencer_id=username).all()
+    return AdRequest.query.filter_by(influencer_id=username, From='Sponsor').all()
 
 
 # Routes --------------------------------
@@ -140,7 +150,8 @@ def create_ad_request():
 @bp.route('/')
 def index():
     all_reqs = get_current_requests()
-    return render_template("sponsor/send_request.html", active_tab="adrequest", reqs=all_reqs)
+    in_req = get_ad_request_for_sponsor(session['username'])
+    return render_template("sponsor/send_request.html", active_tab="adrequest", reqs=all_reqs, in_req=in_req)
 
 
 @bp.route('/influ_req')
